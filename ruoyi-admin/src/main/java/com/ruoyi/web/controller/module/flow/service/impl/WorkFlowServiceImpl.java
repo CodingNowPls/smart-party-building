@@ -2,12 +2,12 @@ package com.ruoyi.web.controller.module.flow.service.impl;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.web.controller.module.dist.domain.WorkDist;
-import com.ruoyi.web.controller.module.dist.mapper.WorkDistMapper;
 import com.ruoyi.web.controller.module.flow.domain.WorkFlow;
 import com.ruoyi.web.controller.module.flow.mapper.WorkFlowMapper;
 import com.ruoyi.web.controller.module.flow.service.IWorkFlowService;
 import com.ruoyi.web.controller.module.work.mapper.WorkMapper;
+import com.ruoyi.web.controller.module.workdist.domain.WorkDist;
+import com.ruoyi.web.controller.module.workdist.mapper.WorkDistMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
