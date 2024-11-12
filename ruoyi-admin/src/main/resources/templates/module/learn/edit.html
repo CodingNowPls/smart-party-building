@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改学习')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-learn-edit" th:object="${learn}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">用户id：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="userId" th:field="*{userId}" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">用户姓名：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="userName" th:field="*{userName}" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">资讯id：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="newId" th:field="*{newId}" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">学习状态 (1 未学习 2 已学习)：</label>
+            <div class="col-sm-8">
+                <div class="radio-box">
+                    <input name="status" type="radio" value="">
+                    <label th:for="status" th:text="未知"></label>
+                </div>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">学分：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="score" th:field="*{score}" type="text">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/learn";
+    $("#form-learn-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-learn-edit').serialize());
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.controller.module.light.mapper.LightMapper">
+
+    <resultMap type="Light" id="LightResult">
+        <result property="lightId" column="light_id"/>
+        <result property="lightTitle" column="light_title"/>
+        <result property="lightPic" column="light_pic"/>
+        <result property="lightContent" column="light_content"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectLightVo">
+        select light_id,
+               light_title,
+               light_pic,
+               light_content,
+               status,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from tb_light
+    </sql>
+
+    <select id="selectLightList" parameterType="Light" resultMap="LightResult">
+        <include refid="selectLightVo"/>
+        <where>
+            <if test="lightTitle != null  and lightTitle != ''">and light_title like concat('%', #{lightTitle}, '%')
+            </if>
+            <if test="lightContent != null  and lightContent != ''">and light_content = #{lightContent}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectLightById" parameterType="Long" resultMap="LightResult">
+        <include refid="selectLightVo"/>
+        where light_id = #{lightId}
+    </select>
+
+    <insert id="insertLight" parameterType="Light" useGeneratedKeys="true" keyProperty="lightId">
+        insert into tb_light
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="lightTitle != null  and lightTitle != ''">light_title,</if>
+            <if test="lightPic != null  and lightPic != ''">light_pic,</if>
+            <if test="lightContent != null  and lightContent != ''">light_content,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="lightTitle != null  and lightTitle != ''">#{lightTitle},</if>
+            <if test="lightPic != null  and lightPic != ''">#{lightPic},</if>
+            <if test="lightContent != null  and lightContent != ''">#{lightContent},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateLight" parameterType="Light">
+        update tb_light
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="lightTitle != null  and lightTitle != ''">light_title = #{lightTitle},</if>
+            <if test="lightPic != null  and lightPic != ''">light_pic = #{lightPic},</if>
+            <if test="lightContent != null  and lightContent != ''">light_content = #{lightContent},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where light_id = #{lightId}
+    </update>
+
+    <delete id="deleteLightById" parameterType="Long">
+        delete
+        from tb_light
+        where light_id = #{lightId}
+    </delete>
+
+    <delete id="deleteLightByIds" parameterType="String">
+        delete from tb_light where light_id in
+        <foreach item="lightId" collection="array" open="(" separator="," close=")">
+            #{lightId}
+        </foreach>
+    </delete>
+
+</mapper>

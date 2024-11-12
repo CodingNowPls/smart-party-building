@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.detail.mapper.UserDetailMapper">
+
+    <resultMap type="UserDetail" id="UserDetailResult">
+        <result property="detailId" column="detail_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userFile" column="user_file"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="introduce" column="introduce"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectUserDetailVo">
+        select detail_id,
+               user_id,
+               user_file,
+               (SELECT user_name FROM sys_user u WHERE u.user_id = d.user_id) AS
+                   user_name,
+               start_time,
+               end_time,
+               introduce,
+               status,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from tb_user_detail d
+    </sql>
+
+    <select id="selectUserDetailList" parameterType="UserDetail" resultMap="UserDetailResult">
+        <include refid="selectUserDetailVo"/>
+        <where>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="userFile != null  and userFile != ''">and user_file = #{userFile}</if>
+            <if test="startTime != null  and startTime != ''">and start_time = #{startTime}</if>
+            <if test="endTime != null  and endTime != ''">and end_time = #{endTime}</if>
+            <if test="introduce != null  and introduce != ''">and introduce = #{introduce}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectUserDetailById" parameterType="Long" resultMap="UserDetailResult">
+        <include refid="selectUserDetailVo"/>
+        where detail_id = #{detailId}
+    </select>
+
+    <insert id="insertUserDetail" parameterType="UserDetail" useGeneratedKeys="true" keyProperty="detailId">
+        insert into tb_user_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="userFile != null  and userFile != ''">user_file,</if>
+            <if test="startTime != null  and startTime != ''">start_time,</if>
+            <if test="endTime != null  and endTime != ''">end_time,</if>
+            <if test="introduce != null  and introduce != ''">introduce,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">#{userId},</if>
+            <if test="userFile != null  and userFile != ''">#{userFile},</if>
+            <if test="startTime != null  and startTime != ''">#{startTime},</if>
+            <if test="endTime != null  and endTime != ''">#{endTime},</if>
+            <if test="introduce != null  and introduce != ''">#{introduce},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateUserDetail" parameterType="UserDetail">
+        update tb_user_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="userFile != null  and userFile != ''">user_file = #{userFile},</if>
+            <if test="startTime != null  and startTime != ''">start_time = #{startTime},</if>
+            <if test="endTime != null  and endTime != ''">end_time = #{endTime},</if>
+            <if test="introduce != null  and introduce != ''">introduce = #{introduce},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where detail_id = #{detailId}
+    </update>
+
+    <delete id="deleteUserDetailById" parameterType="Long">
+        delete
+        from tb_user_detail
+        where detail_id = #{detailId}
+    </delete>
+
+    <delete id="deleteUserDetailByIds" parameterType="String">
+        delete from tb_user_detail where detail_id in
+        <foreach item="detailId" collection="array" open="(" separator="," close=")">
+            #{detailId}
+        </foreach>
+    </delete>
+
+</mapper>

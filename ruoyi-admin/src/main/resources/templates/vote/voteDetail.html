@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('投票记录列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 ">
+            <form id="formId">
+                <input name="voteUserById" th:value="${userById}" type="hidden"/>
+                <input name="voteId" th:value="${voteId}" type="hidden"/>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('vote:voterecord:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('vote:voterecord:remove')}]];
+    var prefix = ctx + "vote/voterecord";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "投票记录",
+            showColumns: false,
+            showToggle: false,
+            showExport: false,
+            showSearch: false,
+            showRefresh: false,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'userName',
+                    title: '选举人姓名'
+                },
+                {
+                    field: 'voteCount',
+                    title: '票数'
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

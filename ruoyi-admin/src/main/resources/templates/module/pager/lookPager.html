@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('试卷列表')"/>
+</head>
+<body>
+<div class="container">
+    <div class="panel panel-success">
+        <div class="panel-heading panel-title">
+            <h1 th:text="${list[0].pagerName}"></h1>
+        </div>
+        <div class="panel-body">
+            <div th:each="question,stat:${list}">
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-title">
+                        <span th:text="${stat.index+1}+'.'"></span>
+                        <span th:text="${question.title}"></span>
+                        <span th:text="'('+${question.score}+'分)'"></span>
+                        <span style="color: blue;font-size: 15px;" th:if="${question.questionType} eq 1">(单选题)</span>
+                        <span style="color: blue;font-size: 15px;" th:if="${question.questionType} eq 2">(判断题)</span>
+                        <span style="color: blue;font-size: 15px;" th:if="${question.questionType} eq 3">(多选题)</span>
+                        <span style="color: blue;font-size: 15px;" th:if="${question.questionType} eq 4">(简答题)</span>
+
+                    </div>
+                    <div class="panel-body">
+                        <div th:if="${question.questionType} lt 3">
+                            <div class="item">
+                                <div class="radio">
+                                    <label>
+                                        <input name="answer" th:value="${question.answerA}" type="radio">
+                                        <span th:text="'A:'+${question.answerA}"></span>
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input name="answer" th:value="${question.answerB}" type="radio">
+                                        <span th:text="'B:'+${question.answerB}"></span>
+                                    </label>
+
+                                </div>
+
+                                <div th:if="${question.questionType} ne 2">
+                                    <div class="radio">
+                                        <label>
+                                            <input name="answer" th:value="${question.answerC}" type="radio">
+                                            <span th:text="'C:'+${question.answerC}"></span>
+                                        </label>
+                                    </div>
+
+                                    <div class="radio">
+                                        <label>
+                                            <input name="answer" th:value="${question.answerD}" type="radio">
+                                            <span th:text="'D:'+${question.answerD}"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${question.questionType} eq 3">
+                            <div class="item">
+                                <div class="checkBox">
+                                    <label>
+                                        <input name="answer" th:value="${question.answerA}" type="checkBox">
+                                        <span th:text="'A:'+${question.answerA}"></span>
+                                    </label>
+                                </div>
+
+                                <div class="checkBox">
+                                    <label>
+                                        <input name="answer" th:value="${question.answerB}" type="checkBox">
+                                        <span th:text="'B:'+${question.answerB}"></span>
+                                    </label>
+
+                                </div>
+
+                                <div class="checkBox">
+                                    <label>
+                                        <input name="answer" th:value="${question.answerC}" type="checkBox">
+                                        <span th:text="'C:'+${question.answerC}"></span>
+                                    </label>
+                                </div>
+
+                                <div class="checkBox">
+                                    <label>
+                                        <input name="answer" th:value="${question.answerD}" type="checkBox">
+                                        <span th:text="'D:'+${question.answerD}"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${question.questionType} eq 4">
+                            <div class="item">
+                                <textarea class="form-control" name="answer" rows="4" th:value="${question.answer}"
+                                          type="text"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+</script>
+</html>

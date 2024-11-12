@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改任务')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-flow-add" th:object="${work}">
+        <input name="workId" th:field="*{workId}" type="hidden">
+        <input name="dealId" th:value="${work.distId}" type="hidden">
+        <input name="distId" th:value="${work.id}" type="hidden">
+        <input name="dealName" th:value="${work.distName}" type="hidden">
+        <input name="level" type="hidden" value="2">
+        <input name="currentStatus" th:value="${work.status}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">标题：</label>
+            <div class="col-sm-8">
+                <span class="form-control" name="title" th:text="*{title}" type="text"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">等级：</label>
+            <div class="col-sm-8">
+                <!--<input name="grade" th:field="*{grade}" class="form-control" type="text">-->
+                <select class="form-control m-b" disabled="disabled" name="grade"
+                        th:field="*{grade}" th:with="type=${@dict.getType('tb_work_grade')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开始时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group ">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <span class="form-control" name="startTime" th:text="${work.startTime}" type="text"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">截至时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group ">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <span class="form-control" name="endTime" th:text="${work.endTime}"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">说明：</label>
+            <div class="col-sm-8">
+                <span class="form-control" name="introduce" style="height: 40px;" th:text="*{introduce}"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">创建人：</label>
+            <div class="col-sm-8">
+                <span class="form-control" id="userName" name="userName" th:text="*{userName}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">创建时间：</label>
+            <div class="col-sm-8">
+                <span class="form-control" id="userTime" name="userTime"
+                      th:text="${#dates.format(work.userTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">分配给：</label>
+            <div class="col-sm-8">
+                <span class="form-control" id="distName" name="distName" th:text="*{distName}"></span>
+            </div>
+        </div>
+
+        <h4 class="form-header h4">审核流程</h4>
+        <div class="row" style="margin: 10px;">
+            <h2 style="text-align: center;color: red">审核处理</h2>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <span class="form-control" name="distName" th:text="待+*{distName}+'验证'"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">处理流程：</label>
+                <div class="col-sm-8 ">
+                    <div class="form-control">
+                        <span name="distName" th:text="'执行人执行('+*{distName}+')'"></span>
+                        -> <span name="userName" th:text="'提交人验证('+*{userName}+')'"></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red">*</span>处理动作：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('tb_check_status')}">
+                        <input id="dealStatus" name="dealStatus" th:checked="${dict.isDefault == 'Y' ? true : false}"
+                               th:id="${dict.dictCode}"
+                               th:value="${dict.dictValue}" type="radio">
+                        <label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input name="actionName" type="hidden" value="提交人验证">
+
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">说明：</label>
+                <div class="col-sm-8">
+                    <textarea class="form-control" id="dealExplain" name="dealExplain" rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3 control-label"> </label>
+                <div class="col-sm-8">
+                    <button class="btn btn-danger" id="btn" onclick="submitForm()" type="button">提交处理</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/flow"
+    $("#form-work-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitForm() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-flow-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

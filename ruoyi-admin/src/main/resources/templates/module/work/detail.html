@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改任务')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-flow-add">
+        <input name="distId" th:value="${work.id}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">标题：</label>
+            <div class="col-sm-8">
+                <span class="form-control" name="title" th:text="${work.title}" type="text"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">等级：</label>
+            <div class="col-sm-8">
+                <!--<input name="grade" th:field="*{grade}" class="form-control" type="text">-->
+                <select class="form-control m-b" disabled="disabled" name="grade"
+                        th:value="${work.grade}" th:with="type=${@dict.getType('tb_work_grade')}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开始时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group ">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <span class="form-control" name="startTime" th:text="${work.startTime}" type="text"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">截至时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group ">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <span class="form-control" name="endTime" th:text="${work.endTime}"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">说明：</label>
+            <div class="col-sm-8">
+                <span class="form-control" name="introduce" style="height: 40px;" th:text="${work.introduce}"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">创建人：</label>
+            <div class="col-sm-8">
+                <span class="form-control" id="userName" name="userName" th:text="${work.userName}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">创建时间：</label>
+            <div class="col-sm-8">
+                <span class="form-control" id="userTime" name="userTime"
+                      th:text="${#dates.format(work.userTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">分配给：</label>
+            <div class="col-sm-8">
+                <span class="form-control" id="distName" name="distName" th:text="${work.distName}"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div>
+                <h4 class="form-header h4">
+                    <a data-parent="#accordion" data-toggle="collapse" href="#collapseOne"
+                       style="color: #0000FF;">审核流程</a>
+                </h4>
+            </div>
+            <div class="panel-collapse collapse" id="collapseOne">
+                <div class="panel-body">
+                    <table id="bootstrap-table"></table>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" style="margin: 10px;">
+            <h2 style="text-align: center;color: red">审核处理</h2>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" id="status" th:value="${work.status}" type="hidden"/>
+                    <span class="form-control" id="statusStr" type="text"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">处理流程：</label>
+                <div class="col-sm-8 ">
+                    <span class="form-control" name="deal" style="height: 60px;" th:text="${buffer}">
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/flow";
+    $("#form-work-edit").validate({
+        focusCleanup: true
+    });
+
+    $(function () {
+        var value = $("#status").val();
+        var distName = $("#distName").html();
+        var userName = $("#userName").html();
+        var str = "";
+        if (value == '1') {
+            str = "待 " + "<span style='color: red'>" + distName + "</span>" + " 执行";
+        } else if (value == '2') {
+            str = "<span style='color: red'>" + distName + "</span>" + " 执行中";
+        } else if (value == '3') {
+            str = "待 " + "<span style='color: red'>" + userName + "</span>" + " 验证";
+        } else if (value == '4') {
+            str = "退回给" + "<span style='color: red'>" + distName + "</span>";
+        } else if (value == '5') {
+            str = "<span style='color: red'>已完成</span>";
+        }
+        $("#statusStr").html(str);
+
+    });
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            removeUrl: prefix + "/remove",
+            modalName: "任务流程",
+            showExport: false,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            showFooter: true,
+            paginationDetailHAlign: ' hidden',
+            columns: [
+                {
+                    field: 'flowId',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'actionName',
+                    title: '动作',
+                    align: 'center'
+                },
+                {
+                    field: 'dealName',
+                    title: '处理人',
+                    align: 'center'
+                },
+                {
+                    field: 'dealStatus',
+                    title: '状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+
+                        var str = "";
+                        if (value == '1') {
+                            str = "执行中"
+                        } else if (value == '2') {
+                            str = "已完成"
+                        } else if (value == '3') {
+                            str = "不同意"
+                        } else if (value == '4') {
+                            str = "同意"
+                        }
+                        return str;
+                    }
+                },
+                {
+                    field: 'dealExplain',
+                    title: '执行说明',
+                    align: 'center'
+                },
+                {
+                    field: 'dealTime',
+                    title: '执行时间',
+                    align: 'center'
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function submitForm() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-flow-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

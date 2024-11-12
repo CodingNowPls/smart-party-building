@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('任务列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <input id="userId" name="userId" th:value="${userId}" type="hidden">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>标题：</label>
+                            <input name="title" type="text"/>
+                        </li>
+                        <li>
+                            <label>状态：</label>
+                            <select name="status">
+                                <option value="">所有</option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="module:work:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="module:work:edit">-->
+            <!--<i class="fa fa-edit"></i> 修改-->
+            <!--</a>-->
+            <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="module:work:remove">-->
+            <!--<i class="fa fa-remove"></i> 删除-->
+            <!--</a>-->
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('module:work:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('module:work:remove')}]];
+    var prefix = ctx + "module/work";
+    var datas = [[${@dict.getType('tb_work_grade')}]];
+    var types = [[${@dict.getType('tb_work_status')}]];
+
+    $(function () {
+        var options = {
+            url: prefix + "/myList",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "任务",
+            detailView: true,
+            showFooter: false,
+            onExpandRow: function (index, row, $detail) {
+                initChildTable(index, row, $detail);
+            },
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'workId',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'title',
+                    title: '标题'
+                },
+                {
+                    field: 'grade',
+                    title: '等级',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+                {
+                    field: 'startTime',
+                    title: '时间段',
+                    formatter: function (value, row, index) {
+                        return row.startTime + " 至 " + row.endTime;
+                    }
+                },
+                {
+                    field: 'userName',
+                    title: '创建人'
+                },
+                {
+                    field: 'userTime',
+                    title: '创建时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.workId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.workId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+
+    initChildTable = function (index, row, $detail) {
+        var childTable = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+        $(childTable).bootstrapTable({
+            url: ctx + "module/dist/list",
+            removeUrl: ctx + "module/dist/remove",
+            method: 'post',
+            sidePagination: "server",
+            contentType: "application/x-www-form-urlencoded",
+            queryParams: {
+                workId: row.workId
+            },
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键',
+                    visible: true
+                },
+                {
+                    field: 'title',
+                    title: '任务标题',
+                    visible: true
+                },
+                {
+                    field: 'distId',
+                    title: '分配给id',
+                    visible: false
+                },
+                {
+                    field: 'distName',
+                    title: '分配给'
+                },
+                {
+                    field: 'score',
+                    title: '分值',
+                    visible: false
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        //return $.table.selectDictLabel(types, value);
+                        var str = "";
+                        if (value == '1') {
+                            str = "待 " + "<span style='color: red'>" + row.distName + "</span>" + " 执行";
+                        } else if (value == '2') {
+                            str = "<span style='color: red'>" + row.distName + "</span>" + " 执行中";
+                        } else if (value == '3') {
+                            str = "待 " + "<span style='color: red'>" + row.userName + "</span>" + " 验证";
+                        } else if (value == '4') {
+                            str = "退回给" + "<span style='color: red'>" + row.distName + "</span>";
+                        } else if (value == '5') {
+                            str = "<span style='color: red'>已完成</span>";
+                        }
+                        return str;
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        console.log(row.status);
+                        var userId = $("#userId").val();
+                        if (row.status == "1" || row.status == "2") {
+                            if (row.distId == userId) {
+                                actions.push('<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="deal(\'' + row.id + '\')"><i class="fa fa-edit"></i>去处理</a> ');
+                            }
+                        } else if (row.status == "3") {
+                            if (row.userId == userId) {
+                                actions.push('<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="check(\'' + row.id + '\')"><i class="fa fa-edit"></i>去验证</a> ');
+                            }
+                        } else if (row.status == "4") {
+                            if (row.distId == userId) {
+                                actions.push('<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="deal(\'' + row.id + '\')"><i class="fa fa-edit"></i>去处理</a> ');
+                            }
+                        }
+                        actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.id + '\')"><i class="fa fa-edit"></i>详情</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        });
+    };
+
+
+    /**
+     * 处理
+     * @param workId
+     */
+    function deal(id) {
+        var url = prefix + "/deal?id=" + id;
+        layer.open({
+            type: 2,
+            area: [($(window).width() - $(window).width() * 0.4) + 'px', ($(window).height() - 50) + 'px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "任务",
+            content: url,
+            btn: [],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function (index, layero) {
+
+            },
+            cancel: function (index) {
+                return true;
+            }
+        });
+    }
+
+    /**
+     * 验证
+     * @param workId
+     */
+    function check(id) {
+        var url = prefix + "/check?id=" + id;
+        layer.open({
+            type: 2,
+            area: [($(window).width() - $(window).width() * 0.4) + 'px', ($(window).height() - 50) + 'px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "任务",
+            content: url,
+            btn: [],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function (index, layero) {
+
+            },
+            cancel: function (index) {
+                return true;
+            }
+        });
+    }
+
+    /**
+     * 详情
+     * @param workId
+     */
+    function detail(id) {
+        var url = prefix + "/detail?id=" + id;
+        layer.open({
+            type: 2,
+            area: [($(window).width() - $(window).width() * 0.4) + 'px', ($(window).height() - 50) + 'px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "详情",
+            content: url,
+            btn: [],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function (index, layero) {
+
+            },
+            cancel: function (index) {
+                return true;
+            }
+        });
+    }
+
+    function remove(id) {
+        $.modal.confirm("确定删除该条" + table.options.modalName + "信息吗？", function () {
+            var url = ctx + "module/dist/remove";
+            var data = {"ids": id};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+</script>
+</body>
+</html>

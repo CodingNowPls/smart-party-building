@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.user.mapper.UserMapper">
+
+    <resultMap type="User" id="UserResult">
+        <id property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="loginName" column="login_name"/>
+        <result property="userName" column="user_name"/>
+        <result property="userType" column="user_type"/>
+        <result property="email" column="email"/>
+        <result property="phonenumber" column="phonenumber"/>
+        <result property="sex" column="sex"/>
+        <result property="avatar" column="avatar"/>
+        <result property="password" column="password"/>
+        <result property="salt" column="salt"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginDate" column="login_date"/>
+        <result property="nation" column="nation"/>
+        <result property="year" column="year"/>
+        <result property="family" column="family"/>
+        <result property="place" column="place"/>
+        <result property="oldLevel" column="old_level"/>
+        <result property="newLevel" column="new_level"/>
+        <result property="partyPost" column="party_post"/>
+        <result property="adminPost" column="admin_post"/>
+        <result property="workTime" column="work_time"/>
+        <result property="jobName" column="job_name"/>
+        <result property="refer" column="refer"/>
+        <result property="partyTime" column="party_time"/>
+        <result property="positiveTime" column="positive_time"/>
+        <result property="office" column="office"/>
+        <result property="idCard" column="id_card"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="fileName" column="file_name"/>
+        <result property="userFile" column="user_file"/>
+        <association property="dept" column="dept_id" javaType="Dept" resultMap="deptResult"/>
+        <collection property="roles" javaType="java.util.List" resultMap="RoleResult"/>
+    </resultMap>
+
+    <resultMap id="deptResult" type="Dept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="leader" column="leader"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+
+    <resultMap id="RoleResult" type="Role">
+        <id property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="roleKey" column="role_key"/>
+        <result property="roleSort" column="role_sort"/>
+        <result property="dataScope" column="data_scope"/>
+        <result property="status" column="role_status"/>
+    </resultMap>
+
+    <sql id="selectUserVo">
+        select u.user_id,
+               u.dept_id,
+               u.login_name,
+               u.user_name,
+               u.user_type,
+               u.email,
+               u.avatar,
+               u.phonenumber,
+               u.sex,
+               u.password,
+               u.salt,
+               u.status,
+               u.del_flag,
+               u.login_ip,
+               u.login_date,
+               u.nation,
+               u.year,
+               u.family,
+               u.place,
+               u.old_level,
+               u.new_level,
+               u.party_post,
+               u.admin_post,
+               u.work_time,
+               u.job_name,
+               u.refer,
+               u.party_time,
+               u.positive_time,
+               u.office,
+               u.id_card,
+               u.create_time,
+               u.remark,
+               u.user_file,
+               u.user_name,
+               d.dept_id,
+               d.parent_id,
+               d.dept_name,
+               d.order_num,
+               d.leader,
+               d.status as dept_status,
+               r.role_id,
+               r.role_name,
+               r.role_key,
+               r.role_sort,
+               r.data_scope,
+               r.status as role_status
+        from sys_user u
+                 left join sys_dept d on u.dept_id = d.dept_id
+                 left join sys_user_role ur on u.user_id = ur.user_id
+                 left join sys_role r on r.role_id = ur.role_id
+    </sql>
+
+    <select id="selectUserList" parameterType="User" resultMap="UserResult">
+        select u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber,
+        u.password, u.sex, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,
+        d.dept_name, d.leader from sys_user u
+        left join sys_dept d on u.dept_id = d.dept_id
+        where u.del_flag = '0'
+        <if test="loginName != null and loginName != ''">
+            AND u.login_name like concat('%', #{loginName}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND u.status = #{status}
+        </if>
+        <if test="phonenumber != null and phonenumber != ''">
+            AND u.phonenumber like concat('%', #{phonenumber}, '%')
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
+        <if test="deptId != null and deptId != 0">
+            AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET
+            (#{deptId},ancestors) ))
+        </if>
+        <if test="place != null  and place != ''">and u.place = #{place}</if>
+        <if test="oldLevel != null  and oldLevel != ''">and u.old_level = #{oldLevel}</if>
+        <if test="newLevel != null  and newLevel != ''">and u.new_level = #{newLevel}</if>
+        <if test="partyPost != null  and partyPost != ''">and u.party_post = #{partyPost}</if>
+        <if test="adminPost != null  and adminPost != ''">and u.admin_post = #{adminPost}</if>
+        <if test="workTime != null  and workTime != ''">and u.work_time = #{workTime}</if>
+        <if test="jobName != null  and jobName != ''">and u.job_name like concat('%', #{jobName}, '%')</if>
+        <if test="refer != null  and refer != ''">and u.refer = #{refer}</if>
+        <if test="partyTime != null  and partyTime != ''">and u.party_time = #{partyTime}</if>
+        <if test="positiveTime != null  and positiveTime != ''">and u.positive_time = #{positiveTime}</if>
+        <if test="office != null  and office != ''">and u.office = #{office}</if>
+        <if test="idCard != null  and idCard != ''">and u.id_card = #{idCard}</if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <select id="selectAllocatedList" parameterType="User" resultMap="UserResult">
+        select distinct u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber,
+        u.status, u.create_time
+        from sys_user u
+        left join sys_dept d on u.dept_id = d.dept_id
+        left join sys_user_role ur on u.user_id = ur.user_id
+        left join sys_role r on r.role_id = ur.role_id
+        where u.del_flag = '0' and r.role_id = #{roleId}
+        <if test="loginName != null and loginName != ''">
+            AND u.login_name like concat('%', #{loginName}, '%')
+        </if>
+        <if test="phonenumber != null and phonenumber != ''">
+            AND u.phonenumber like concat('%', #{phonenumber}, '%')
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <select id="selectUnallocatedList" parameterType="User" resultMap="UserResult">
+        select distinct u.user_id, u.dept_id, u.login_name, u.user_name, u.user_type, u.email, u.avatar, u.phonenumber,
+        u.status, u.create_time
+        from sys_user u
+        left join sys_dept d on u.dept_id = d.dept_id
+        left join sys_user_role ur on u.user_id = ur.user_id
+        left join sys_role r on r.role_id = ur.role_id
+        where u.del_flag = '0' and (r.role_id != #{roleId} or r.role_id IS NULL)
+        and u.user_id not in (select u.user_id from sys_user u inner join sys_user_role ur on u.user_id = ur.user_id and
+        ur.role_id = #{roleId})
+        <if test="loginName != null and loginName != ''">
+            AND u.login_name like concat('%', #{loginName}, '%')
+        </if>
+        <if test="phonenumber != null and phonenumber != ''">
+            AND u.phonenumber like concat('%', #{phonenumber}, '%')
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <select id="selectUserByLoginName" parameterType="String" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        where u.login_name = #{userName} and u.del_flag !='2'
+    </select>
+
+    <select id="selectUserByPhoneNumber" parameterType="String" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        where u.phonenumber = #{phonenumber} and u.del_flag !='2'
+    </select>
+
+    <select id="selectUserByEmail" parameterType="String" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        where u.email = #{email} and u.del_flag !='2'
+    </select>
+
+    <select id="checkLoginNameUnique" parameterType="String" resultType="int">
+        select count(1)
+        from sys_user
+        where login_name = #{loginName}
+          and del_flag = '0'
+    </select>
+
+    <select id="checkPhoneUnique" parameterType="String" resultMap="UserResult">
+        select user_id, phonenumber
+        from sys_user
+        where phonenumber = #{phonenumber}
+          and del_flag = '0'
+    </select>
+
+    <select id="checkEmailUnique" parameterType="String" resultMap="UserResult">
+        select user_id, email
+        from sys_user
+        where email = #{email}
+    </select>
+
+    <select id="selectUserById" parameterType="Long" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        where u.user_id = #{userId}
+    </select>
+
+    <delete id="deleteUserById" parameterType="Long">
+        update sys_user
+        set del_flag = '2'
+        where user_id = #{userId}
+    </delete>
+
+    <!--<delete id="deleteUserByIds" parameterType="Long">-->
+    <!--delete from sys_user  where user_id in-->
+    <!--<foreach collection="array" item="userId" open="(" separator="," close=")">-->
+    <!--#{userId}-->
+    <!--</foreach>-->
+    <!--</delete>-->
+
+    <delete id="deleteUserByIds" parameterType="Long">
+        update sys_user set del_flag = '2' where user_id in
+        <foreach collection="array" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+    <update id="updateUser" parameterType="User">
+        update sys_user
+        <set>
+            <if test="deptId != null and deptId != 0">dept_id = #{deptId},</if>
+            <if test="loginName != null and loginName != ''">login_name = #{loginName},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="userType != null and userType != ''">user_type = #{userType},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="phonenumber != null and phonenumber != ''">phonenumber = #{phonenumber},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="salt != null and salt != ''">salt = #{salt},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="loginIp != null and loginIp != ''">login_ip = #{loginIp},</if>
+            <if test="loginDate != null">login_date = #{loginDate},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="userFile != null  and userFile != ''">user_file = #{userFile},</if>
+            <if test="fileName != null  and fileName != ''">file_name = #{fileName},</if>
+            <if test="nation != null  and nation != ''">nation = #{nation},</if>
+            <if test="year != null  and year != ''">year = #{year},</if>
+            <if test="family != null  and family != ''">family = #{family},</if>
+            <if test="place != null  and place != ''">place = #{place},</if>
+            <if test="oldLevel != null  and oldLevel != ''">old_level = #{oldLevel},</if>
+            <if test="newLevel != null  and newLevel != ''">new_level = #{newLevel},</if>
+            <if test="partyPost != null  and partyPost != ''">party_post = #{partyPost},</if>
+            <if test="adminPost != null  and adminPost != ''">admin_post = #{adminPost},</if>
+            <if test="workTime != null  and workTime != ''">work_time = #{workTime},</if>
+            <if test="jobName != null  and jobName != ''">job_name = #{jobName},</if>
+            <if test="refer != null  and refer != ''">refer = #{refer},</if>
+            <if test="partyTime != null  and partyTime != ''">party_time = #{partyTime},</if>
+            <if test="positiveTime != null  and positiveTime != ''">positive_time = #{positiveTime},</if>
+            <if test="office != null  and office != ''">office = #{office},</if>
+            <if test="idCard != null  and idCard != ''">id_card = #{idCard},</if>
+            update_time = sysdate()
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
+        insert into sys_user(
+        <if test="userId != null and userId != 0">user_id,</if>
+        <if test="deptId != null and deptId != 0">dept_id,</if>
+        <if test="loginName != null and loginName != ''">login_name,</if>
+        <if test="userName != null and userName != ''">user_name,</if>
+        <if test="userType != null and userType != ''">user_type,</if>
+        <if test="email != null and email != ''">email,</if>
+        <if test="avatar != null and avatar != ''">avatar,</if>
+        <if test="phonenumber != null and phonenumber != ''">phonenumber,</if>
+        <if test="sex != null and sex != ''">sex,</if>
+        <if test="password != null and password != ''">password,</if>
+        <if test="salt != null and salt != ''">salt,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="userFile != null  and userFile != ''">user_file,</if>
+        <if test="fileName != null  and fileName != ''">file_name,</if>
+        <if test="nation != null  and nation != ''">nation,</if>
+        <if test="year != null  and year != ''">year,</if>
+        <if test="family != null  and family != ''">family,</if>
+        <if test="place != null  and place != ''">place,</if>
+        <if test="oldLevel != null  and oldLevel != ''">old_level,</if>
+        <if test="newLevel != null  and newLevel != ''">new_level,</if>
+        <if test="partyPost != null  and partyPost != ''">party_post,</if>
+        <if test="adminPost != null  and adminPost != ''">admin_post,</if>
+        <if test="workTime != null  and workTime != ''">work_time,</if>
+        <if test="jobName != null  and jobName != ''">job_name,</if>
+        <if test="refer != null  and refer != ''">refer,</if>
+        <if test="partyTime != null  and partyTime != ''">party_time,</if>
+        <if test="positiveTime != null  and positiveTime != ''">positive_time,</if>
+        <if test="office != null  and office != ''">office,</if>
+        <if test="idCard != null  and idCard != ''">id_card,</if>
+        create_time
+        )values(
+        <if test="userId != null and userId != ''">#{userId},</if>
+        <if test="deptId != null and deptId != ''">#{deptId},</if>
+        <if test="loginName != null and loginName != ''">#{loginName},</if>
+        <if test="userName != null and userName != ''">#{userName},</if>
+        <if test="userType != null and userType != ''">#{userType},</if>
+        <if test="email != null and email != ''">#{email},</if>
+        <if test="avatar != null and avatar != ''">#{avatar},</if>
+        <if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
+        <if test="sex != null and sex != ''">#{sex},</if>
+        <if test="password != null and password != ''">#{password},</if>
+        <if test="salt != null and salt != ''">#{salt},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="userFile != null  and userFile != ''">#{userFile},</if>
+        <if test="fileName != null  and fileName != ''">#{fileName},</if>
+        <if test="nation != null  and nation != ''">#{nation},</if>
+        <if test="year != null  and year != ''">#{year},</if>
+        <if test="family != null  and family != ''">#{family},</if>
+        <if test="place != null  and place != ''">#{place},</if>
+        <if test="oldLevel != null  and oldLevel != ''">#{oldLevel},</if>
+        <if test="newLevel != null  and newLevel != ''">#{newLevel},</if>
+        <if test="partyPost != null  and partyPost != ''">#{partyPost},</if>
+        <if test="adminPost != null  and adminPost != ''">#{adminPost},</if>
+        <if test="workTime != null  and workTime != ''">#{workTime},</if>
+        <if test="jobName != null  and jobName != ''">#{jobName},</if>
+        <if test="refer != null  and refer != ''">#{refer},</if>
+        <if test="partyTime != null  and partyTime != ''">#{partyTime},</if>
+        <if test="positiveTime != null  and positiveTime != ''">#{positiveTime},</if>
+        <if test="office != null  and office != ''">#{office},</if>
+        <if test="idCard != null  and idCard != ''">#{idCard},</if>
+        sysdate()
+        )
+    </insert>
+
+</mapper> 

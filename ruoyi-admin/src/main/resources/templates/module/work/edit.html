@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改任务')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-work-edit" th:object="${work}">
+        <input name="workId" th:field="*{workId}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">标题：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="title" required th:field="*{title}" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">等级：</label>
+            <div class="col-sm-8">
+                <!--<input name="grade" th:field="*{grade}" class="form-control" type="text">-->
+                <select class="form-control m-b" name="grade" required
+                        th:field="*{grade}" th:with="type=${@dict.getType('tb_work_grade')}">
+                    <option value="">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开始时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input class="form-control" name="startTime" placeholder="yyyy-MM-dd" th:value="${work.startTime}"
+                           type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">截至时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input class="form-control" name="endTime" placeholder="yyyy-MM-dd" th:value="${work.endTime}"
+                           type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">说明：</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" name="introduce" rows="5" th:field="*{introduce}"></textarea>
+            </div>
+        </div>
+
+        <!--<div class="form-group">    -->
+        <!--<label class="col-sm-3 control-label">分配给：</label>-->
+        <!--<div class="col-sm-8">-->
+        <!--<input id="distName" name="distName" th:field="*{distName}" class="form-control" type="hidden">-->
+        <!--<select id="distId" name="distId" class="form-control m-b" onchange="getName();" >-->
+        <!--<option value="">请选择</option>-->
+        <!--<option th:each="user:${userList}" th:text="${user.userName}" th:value="${user.userId}" th:selected="${user.userId == (work.distId) ? true:false}"-->
+        <!--/>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--</div>-->
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/work";
+    $("#form-work-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-work-edit').serialize());
+        }
+    }
+
+    $("input[name='startTime']").datetimepicker({
+        autoclose: true
+    });
+
+    $("input[name='endTime']").datetimepicker({
+        autoclose: true
+    });
+
+    function getName() {
+        var distName = $("#distId").find("option:selected").text();
+        $("#distName").val(distName);
+    }
+</script>
+</body>
+</html>

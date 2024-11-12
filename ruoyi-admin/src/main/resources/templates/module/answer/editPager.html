@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('试卷答案')"/>
+</head>
+<body>
+<div class="container">
+    <div class="panel panel-success">
+        <div class="panel-heading panel-title">
+            <h1 th:text="${list[0].pagerName}"></h1>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal m" id="form-answer-edit">
+                <div th:each="answer,stat:${list}">
+                    <div class="panel panel-default">
+                        <div class="panel-heading panel-title">
+                            <span th:text="${stat.index+1}+'.'"></span>
+                            <span th:text="${answer.question.title}"></span>
+                            <span th:text="'('+${answer.question.score}+'分)'"></span>
+                            <span style="color: blue;font-size: 15px;" th:if="${answer.question.questionType} eq 1">(单选题)</span>
+                            <span style="color: blue;font-size: 15px;" th:if="${answer.question.questionType} eq 2">(判断题)</span>
+                            <span style="color: blue;font-size: 15px;" th:if="${answer.question.questionType} eq 3">(多选题)</span>
+                            <span style="color: blue;font-size: 15px;" th:if="${answer.question.questionType} eq 4">(简答题)</span>
+                        </div>
+                        <div class="panel-body">
+                            <div th:if="${answer.question.questionType} lt 3">
+                                <div class="item">
+                                    <div class="">
+                                        <label>
+                                            <!--<input name="answer" th:value="${answer.question.answerA}" type="radio">-->
+                                            <span th:text="'A:'+${answer.question.answerA}"></span>
+                                        </label>
+                                    </div>
+
+                                    <div class="">
+                                        <label>
+                                            <!--<input name="answer" th:value="${answer.question.answerB}" type="radio">-->
+                                            <span th:text="'B:'+${answer.question.answerB}"></span>
+                                        </label>
+
+                                    </div>
+
+                                    <div th:if="${answer.question.questionType} ne 2">
+                                        <div class="">
+                                            <label>
+                                                <!--<input name="answer" th:value="${answer.question.answerC}" type="radio">-->
+                                                <span th:text="'C:'+${answer.question.answerC}"></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="">
+                                            <label>
+                                                <!--<input name="answer" th:value="${answer.question.answerD}" type="radio">-->
+                                                <span th:text="'D:'+${answer.question.answerD}"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div th:if="${answer.question.questionType} eq 3">
+                                <div class="item">
+                                    <div class="checkBox">
+                                        <label>
+                                            <!--<input name="answer" th:value="${answer.question.answerA}" type="checkBox">-->
+                                            <span th:text="'A:'+${answer.question.answerA}"></span>
+                                        </label>
+                                    </div>
+
+                                    <div class="checkBox">
+                                        <label>
+                                            <!--<input name="answer" th:value="${answer.question.answerB}" type="checkBox">-->
+                                            <span th:text="'B:'+${answer.question.answerB}"></span>
+                                        </label>
+
+                                    </div>
+
+                                    <div class="checkBox">
+                                        <label>
+                                            <!--<input name="answer" th:value="${answer.question.answerC}" type="checkBox">-->
+                                            <span th:text="'C:'+${answer.question.answerC}"></span>
+                                        </label>
+                                    </div>
+
+                                    <div class="checkBox">
+                                        <label>
+                                            <!--<input name="answer" th:value="${answer.question.answerD}" type="checkBox">-->
+                                            <span th:text="'D:'+${answer.question.answerD}"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:if="${answer.question.questionType} eq 4">
+                                <div class="item">
+                                <textarea class="form-control" readonly rows="4"
+                                          th:text="${answer.answer}"
+                                          type="text"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="margin-top: -20px;">
+                            <div th:if="${answer.isRight} eq 1">
+                                <label>结果：<span style="color: red;">正确</span></label>
+                            </div>
+                            <div th:if="${answer.isRight} eq 2">
+                                <label>结果：<span style="color: red;">错误</span></label>
+                            </div>
+                            <div th:if="${answer.question.questionType} eq 4">
+                                <input name="id" th:value="${answer.id}" type="hidden">
+                                <label>得分：</label><input class="form-control" name="mark" required
+                                                           style="width: 500px;"
+                                                           th:value="${answer.mark}" type="number">
+                            </div>
+                            <div th:if="${answer.question.questionType} ne 4">
+                                <span th:text="'得分：'+${answer.mark} "></span>
+                            </div>
+                            <div>
+                                <span th:text="'我的答案：'+${answer.answer} "></span>
+                            </div>
+                            <div>
+                                <span th:text="'正确答案：'+${answer.rightAnswer} "></span>
+                            </div>
+                            <div th:if="${answer.question.introduce} ne null">
+                                <span th:text="'解析：'+${answer.question.introduce} "></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <button class="btn btn-success btn-block" onclick="submit();" type="button">提交</button>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/answer";
+    $("#form-answer-edit").validate({
+        focusCleanup: true
+    });
+
+    //将表单序列化成json格式的数据(但不适用于含有控件的表单，例如复选框、多选的select)
+    (function ($) {
+        $.fn.serializeJson = function () {
+            var jsonData1 = {};
+            var serializeArray = this.serializeArray();
+            // 先转换成{"id": ["12","14"], "name": ["aaa","bbb"], "pwd":["pwd1","pwd2"]}这种形式
+            $(serializeArray).each(function () {
+                if (jsonData1[this.name]) {
+                    if ($.isArray(jsonData1[this.name])) {
+                        jsonData1[this.name].push(this.value);
+                    } else {
+                        jsonData1[this.name] = [jsonData1[this.name], this.value];
+                    }
+                } else {
+                    jsonData1[this.name] = this.value;
+                }
+            });
+            // 再转成[{"id": "12", "name": "aaa", "pwd":"pwd1"},{"id": "14", "name": "bb", "pwd":"pwd2"}]的形式
+            var vCount = 0;
+            // 计算json内部的数组最大长度
+            for (var item in jsonData1) {
+                var tmp = $.isArray(jsonData1[item]) ? jsonData1[item].length : 1;
+                vCount = (tmp > vCount) ? tmp : vCount;
+            }
+
+            if (vCount > 1) {
+                var jsonData2 = new Array();
+                for (var i = 0; i < vCount; i++) {
+                    var jsonObj = {};
+                    for (var item in jsonData1) {
+                        jsonObj[item] = jsonData1[item][i];
+                    }
+                    jsonData2.push(jsonObj);
+                }
+                return JSON.stringify(jsonData2);
+            } else {
+                return "[" + JSON.stringify(jsonData1) + "]";
+            }
+        };
+    })(jQuery);
+
+
+    function submit() {
+        if ($.validate.form()) {
+            var data = $('#form-answer-edit').serializeJson();
+            var config = {
+                url: ctx + "module/answer/updateBatch",
+                type: "post",
+                contentType: 'application/json;charset=utf-8', //设置请求头信息
+                dataType: "json",
+                data: data,
+                success: function (result) {
+                    console.log(result);
+                    if (result.code == web_status.SUCCESS) {
+                        setTimeout(function () {
+                            var url = ctx + "module/answer/count";
+                            $.modal.closeTab(url);
+                            $.modal.openTab("产品列表", url);
+                        }, 500);
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                    }
+                    $.modal.closeLoading();
+                }
+            };
+            $.ajax(config)
+        }
+
+    }
+</script>
+</body>
+</html>

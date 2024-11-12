@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('上传详情图')"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <form class="form-horizontal m" id="form-upload-add">
+                    <div class="ibox-content">
+                        <input class="form-control" id="newId" name="newId" th:value="${newId}" type="hidden">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">上传文件：</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" id="newFile" name="newFile" type="hidden">
+                                        <div class="file-loading">
+                                            <input data-min-file-count="1" id="fileinput-demo-1" multiple name="file"
+                                                   type="file">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">上传视频：</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" id="newVideo" name="newVideo" type="hidden">
+                                        <div class="file-loading">
+                                            <input data-min-file-count="1" id="fileinput-video" multiple name="file"
+                                                   type="file">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //上传文件
+        var uploadUrl = ctx + "common/uploadImage_QiNiu";
+
+        $(document).ready(function () {
+
+            $("#fileinput-demo-1").fileinput({
+                'theme': 'explorer-fas',
+                'uploadUrl': uploadUrl,
+                overwriteInitial: false,
+                initialPreviewAsData: true,
+                initialPreview: []
+            });
+
+            // 上传成功回调
+            $("#fileinput-demo-1").on("fileuploaded", function (event, data, previewId, index) {
+                console.log(data);
+                var url = ctx + "module/upload/add";
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    data: {
+                        newId: $("#newId").val(),
+                        newFile: data.response.data.src
+                    },
+                    async: false,
+                    success: function (result) {
+                    }
+                });
+            });
+        });
+    });
+
+    //上传视频
+    $(document).ready(function () {
+
+        var uploadUrl = ctx + "common/uploadImage_QiNiu";
+
+        $("#fileinput-video").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': uploadUrl,
+            overwriteInitial: false,
+            allowedFileExtensions: ["mp4", "avi", "dat", "3gp", "mov", "rmvb"],
+            initialPreviewAsData: true,
+            initialPreview: []
+        });
+
+        // 上传成功回调
+        $("#fileinput-video").on("fileuploaded", function (event, data, previewId, index) {
+            console.log(data);
+            // $("#newVideo").val(data.response.data.src);
+            var url = ctx + "module/upload/add";
+            $.ajax({
+                type: "post",
+                url: url,
+                data: {
+                    newId: $("#newId").val(),
+                    newVideo: data.response.data.src
+                },
+                async: false,
+                success: function (result) {
+                }
+            });
+
+        });
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.modal.close();
+        }
+    }
+</script>
+</body>
+</html>

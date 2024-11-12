@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增任务流程')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-flow-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">任务id：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="workId" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">处理人id：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="dealId" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">处理人姓名：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="dealName" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">当前状态：</label>
+            <div class="col-sm-8">
+                <div class="radio-box">
+                    <input name="currentStatus" type="radio" value="">
+                    <label th:for="currentStatus" th:text="未知"></label>
+                </div>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">等级(1 执行人 2 验证人)：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="level" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行状态(1 执行中 2 已完成 3 同意 4 不同意) ：</label>
+            <div class="col-sm-8">
+                <div class="radio-box">
+                    <input name="dealStatus" type="radio" value="">
+                    <label th:for="dealStatus" th:text="未知"></label>
+                </div>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行说明：</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" name="dealExplain"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input class="form-control" name="dealTime" placeholder="yyyy-MM-dd" type="text">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/flow"
+    $("#form-flow-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-flow-add').serialize());
+        }
+    }
+
+    $("input[name='dealTime']").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView: "month",
+        autoclose: true
+    });
+</script>
+</body>
+</html>

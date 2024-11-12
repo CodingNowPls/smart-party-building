@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.controller.module.violate.mapper.ViolateMapper">
+
+    <resultMap type="Violate" id="ViolateResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="event" column="event"/>
+        <result property="punish" column="punish"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectViolateVo">
+        select id,
+               name,
+               event,
+               punish,
+               start_time,
+               end_time,
+               status,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from tb_violate
+    </sql>
+
+    <select id="selectViolateList" parameterType="Violate" resultMap="ViolateResult">
+        <include refid="selectViolateVo"/>
+        <where>
+            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="event != null  and event != ''">and event = #{event}</if>
+            <if test="punish != null  and punish != ''">and punish = #{punish}</if>
+            <if test="startTime != null  and startTime != ''">and start_time = #{startTime}</if>
+            <if test="endTime != null  and endTime != ''">and end_time = #{endTime}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectViolateById" parameterType="Long" resultMap="ViolateResult">
+        <include refid="selectViolateVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertViolate" parameterType="Violate" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_violate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="event != null  and event != ''">event,</if>
+            <if test="punish != null  and punish != ''">punish,</if>
+            <if test="startTime != null  and startTime != ''">start_time,</if>
+            <if test="endTime != null  and endTime != ''">end_time,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="event != null  and event != ''">#{event},</if>
+            <if test="punish != null  and punish != ''">#{punish},</if>
+            <if test="startTime != null  and startTime != ''">#{startTime},</if>
+            <if test="endTime != null  and endTime != ''">#{endTime},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateViolate" parameterType="Violate">
+        update tb_violate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="event != null  and event != ''">event = #{event},</if>
+            <if test="punish != null  and punish != ''">punish = #{punish},</if>
+            <if test="startTime != null  and startTime != ''">start_time = #{startTime},</if>
+            <if test="endTime != null  and endTime != ''">end_time = #{endTime},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteViolateById" parameterType="Long">
+        delete
+        from tb_violate
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteViolateByIds" parameterType="String">
+        delete from tb_violate where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

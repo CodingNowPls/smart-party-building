@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增试卷')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-pager-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">试卷名称：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="name" required type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">考试题库：</label>
+            <div class="col-sm-8">
+                <a class="btn btn-success " onclick="addQuestion();">添加题目</a>
+                <input id="questionIds" name="questionIds" type="hidden">
+            </div>
+        </div>
+        <div class="row" id="table" style="display: none">
+            <div class="form-group">
+                <label class="col-sm-3 control-label"></label>
+                <div class="col-sm-8 ">
+                    <div class="select-table table-striped">
+                        <table id="bootstrap-table"></table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">考试对象：</label>
+            <div class="col-sm-8">
+                <a class="btn btn-success " onclick="addUser();">添加考试对象</a>
+                <input id="userId" name="userId" type="hidden">
+            </div>
+        </div>
+        <div class="form-group" id="name" style="display: none">
+            <label class="col-sm-3 control-label"></label>
+            <div class="col-sm-8">
+                <textarea class="form-control" id="userNames" name="userNames" rows="8" type="text"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">考试时间(分钟)：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="ksTime" required type="number">
+            </div>
+        </div>
+        <!--<div class="form-group">    -->
+        <!--<label class="col-sm-3 control-label">总分：</label>-->
+        <!--<div class="col-sm-8">-->
+        <!--<input name="score" class="form-control" type="text" value="100">-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">    -->
+        <!--<label class="col-sm-3 control-label">合格分数：</label>-->
+        <!--<div class="col-sm-8">-->
+        <!--<input name="passScore" class="form-control" type="text" value="60">-->
+        <!--</div>-->
+        <!--</div>-->
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/pager";
+
+    var question_prefix = ctx + "module/question";
+
+    $("#form-pager-add").validate({
+        focusCleanup: true
+    });
+
+    function addQuestion() {
+        var url = ctx + "module/question/questionList";
+        $.modal.open("题库列表", url);
+    }
+
+    function addUser() {
+        var url = ctx + "system/user/userList";
+        $.modal.open("用户列表", url);
+    }
+
+    function getQuestions(questionIds) {
+        console.log(questionIds);
+        if (questionIds != null && questionIds != "") {
+            $("#table").show();
+            var url = question_prefix + "/getQuestionByIds";
+            $.ajax({
+                type: "post",
+                url: url,
+                data: {
+                    ids: questionIds
+                },
+                async: true,
+                success: function (result) {
+                    if (result.code == 0) {
+                        $.each(result.list, function (i, result) {
+                            $("#" + table.options.id).bootstrapTable('insertRow', {
+                                index: 0, // 你想插入到哪，0表示第一行
+                                row: {
+                                    id: result.id,
+                                    title: result.title,
+                                    typeName: result.typeName,
+                                    questionType: result.questionType,
+                                }
+                            })
+                        });
+                    }
+                }
+            })
+        } else {
+            $("#table").hide();
+        }
+    }
+
+
+    function getNames(userIds) {
+        if (userIds == null || userIds == "") {
+            $("#name").hide();
+        } else {
+            $("#name").show();
+        }
+    }
+
+    $(function () {
+        var options = {
+            url: question_prefix + "/getQuestionByIds",
+            modalName: "题目",
+            uniqueId: "id",
+            height: 400,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'title',
+                    title: '题目名称',
+                    width: 350
+                },
+
+                {
+                    field: 'typeName',
+                    title: '分类',
+                    width: 120
+                },
+                {
+                    field: 'questionType',
+                    title: '类型',
+                    formatter: function (value, row, index) {
+                        if (value == '1') {
+                            return "单选题 ";
+                        } else if (value == '2') {
+                            return "多选题 ";
+                        } else if (value == '3') {
+                            return "判断题 ";
+                        } else if (value == '4') {
+                            return "简答题 ";
+                        }
+
+                    },
+                    width: 120
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="removeRow(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* 删除指定表格行 */
+    function removeRow(id) {
+        $("#" + table.options.id).bootstrapTable('removeByUniqueId', id);
+    }
+
+
+    function submitHandler() {
+        var allTableData = $("#" + table.options.id).bootstrapTable('getData');
+        var questionIds = "";
+        $.each(allTableData, function (i, e) {
+            console.log(e.id);
+            questionIds += e.id + ',';
+        });
+        questionIds = questionIds.substring(0, questionIds.length - 1);
+        $("#questionIds").val(questionIds);
+        console.log(questionIds);
+        if (questionIds == null || questionIds == '') {
+            $.modal.alertError("请选择题目");
+            return false;
+        }
+
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-pager-add').serialize());
+        }
+    }
+
+</script>
+</body>
+</html>

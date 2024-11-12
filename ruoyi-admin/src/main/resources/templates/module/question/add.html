@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增题目')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-question-add">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">题库分类：</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" name="typeId" required>
+                            <option value="">请选择</option>
+                            <option th:each="type:${typeList}" th:text="${type.name}" th:value="${type.id}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">类型：</label>
+                    <div class="col-sm-9">
+                        <select class="form-control m-b" id="questionType" name="questionType"
+                                onchange="getType();" required th:with="type=${@dict.getType('tb_question_type')}">
+                            <option value="">请选择</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">题目：</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" name="title" required rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="select">
+            <h3 style="color:#6379bb;margin:8px 10px 20px 70px;">选项:</h3>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">A：</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="answerA" required type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">B：</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="answerB" required type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="pd">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">C：</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="answerC" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">D：</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" name="answerD" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">答案：</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" id="answer" name="answer" placeholder="请输入A B C D"
+                                  required></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">解析：</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" name="introduce" rows="8"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">分数：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" name="score" required type="number">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/question"
+    $("#form-question-add").validate({
+        focusCleanup: true
+    });
+
+    function getType() {
+        var typeId = $("#questionType").find("option:selected").val();
+        if (typeId == '4') { //简答题
+            $("#select").hide();
+            $("#answer").attr("placeholder", "");
+        } else if (typeId == '2') { //判断题
+            $("#pd").hide();
+        } else {
+            $("#pd").show();
+            $("#select").show();
+            $("#answer").attr("placeholder", "请输入A B C D");
+        }
+    }
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-question-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

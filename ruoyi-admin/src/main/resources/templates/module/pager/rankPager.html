@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('题目列表')"/>
+    <th:block th:include="include :: bootstrap-editable-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <input id="pagerId" th:value="${pagerId}" type="hidden">
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-table-editable-js"/>
+
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('module:question:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('module:question:remove')}]];
+    var types = [[${@dict.getType('tb_question_type')}]];
+    var prefix = ctx + "module/pager";
+
+    $(function () {
+        var pagerId = $("#pagerId").val();
+        var options = {
+            url: prefix + "/rankList/" + pagerId,
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "题目",
+            showColumns: false,
+            onEditableSave: onEditableSave,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'title',
+                    title: '题目名称',
+                    width: 400
+                },
+                {
+                    field: 'questionType',
+                    title: '类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(types, value);
+                    },
+                    width: 120
+                },
+                {
+                    field: 'answerA',
+                    title: 'A',
+                    width: 200
+                },
+                {
+                    field: 'answerB',
+                    title: 'B',
+                    width: 200
+                },
+                {
+                    field: 'answerC',
+                    title: 'C',
+                    width: 200
+                },
+                {
+                    field: 'answerD',
+                    title: 'D',
+                    width: 200
+                },
+                {
+                    field: 'answer',
+                    title: '答案',
+                    align: 'center',
+                    width: 200
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    align: 'center',
+                    width: 200,
+                    visible: false
+                },
+                {
+                    field: 'qpId',
+                    title: '题目与试卷关联id',
+                    align: 'center',
+                    visible: false
+                },
+                {
+                    field: 'rank',
+                    title: '排序',
+                    align: 'center',
+                    width: 200,
+                    editable: {
+                        type: 'text',
+                        emptytext: "1",
+                        mode: "inline",
+                        validate: function (v) {
+                            if (isNaN(v)) return '排序必须是数字';
+                            var age = parseInt(v);
+                            if (age <= 0) return '排序必须是正整数';
+                        }
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function onEditableSave(field, row, oldValue, $el) {
+        var id = row.qpId;
+        var rank = row.rank;
+        var data = {
+            id: id,
+            rank: rank
+        };
+        $.ajax({
+            type: "post",
+            url: ctx + "module/questionpager/edit",
+            dataType: "json",
+            data: data,
+            success: function (result, status) {
+                if (result.code == web_status.SUCCESS) {
+                    location.reload();
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+
+            },
+            error: function () {
+                alert('编辑失败');
+            },
+            complete: function () {
+
+            }
+
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:include="include :: header('菜单列表')"/>
+    <meta charset="UTF-8">
+</head>
+<body class="gray-bg">
+<div class="container-div" style="margin-top: 20px;">
+    <div class="row">
+        <div class="col-sm-12" style="height:100%">
+            <div class="panel blank-panel" style="height:100%">
+                <ul class="nav nav-tabs" style="font-size:16px;">
+                    <li class="active"><a aria-expanded="true" data-toggle="tab" href="#tab-1" style="color: #1c3def">
+                        资讯</a>
+                    </li>
+                    <li class=""><a aria-expanded="false" data-toggle="tab" href="#tab-2"
+                                    style="color: #0e9aef">公告</a>
+                    </li>
+                </ul>
+                <div class="tab-content" style="height:100%">
+                    <div class="tab-pane active" id="tab-1" style="height:100%">
+                        <div class="panel-body" style="height:100%">
+                            <iframe style="width: 100%;height:100%;border:none;"
+                                    th:src="@{/module/news/approvalNews}"></iframe>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab-2" style="width: 100%;height:100%;">
+                        <div class="panel-body" style="width: 100%;height:100%;">
+                            <iframe style="width: 100%;height:100%;border:none;"
+                                    th:src="@{/module/news/approvalNotice}"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+</body>
+</html>

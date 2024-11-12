@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改分享美文')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: summernote-css"/>
+    <style type="text/css">
+        .imgDiv {
+            display: inline-block;
+            position: relative;
+        }
+
+        .imgDiv .deleteImg {
+            position: absolute;
+            top: -5px;
+            right: 0px;
+            width: 40px;
+            height: 40px;
+            display: none;
+        }
+
+        .showDiv {
+            display: inline-block;
+            position: relative;
+        }
+
+        .showDiv .showImg {
+            position: absolute;
+            top: -5px;
+            right: 0px;
+            width: 40px;
+            height: 40px;
+        }
+
+    </style>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-article-edit" th:object="${article}">
+        <input name="articleId" th:field="*{articleId}" type="hidden">
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">标题：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="articleTitle" th:field="*{articleTitle}" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">上传时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input class="form-control" id="articleTime"
+                           name="articleTime"
+                           th:value="${#dates.format(article.articleTime, 'yyyy-MM-dd HH:mm:ss')}" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">内容：</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="articleContent" name="articleContent" th:field="*{articleContent}"
+                       type="hidden">
+                <div class="summernote" id="editor"></div>
+            </div>
+        </div>
+        <!--<div class="form-group">    -->
+        <!--<label class="col-sm-3 control-label">图片：</label>-->
+        <!--<div class="col-sm-8">-->
+        <!--<button type="button" class="btn btn-primary" id="showBtn">上传图片</button>-->
+        <!--<input id="articleImg" name="articleImg" th:field="*{articleImg}" type="hidden" class="form-control">-->
+        <!--<div class="layui-upload-list" id="showPrew" style="padding:5px;"></div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">视频：</label>
+            <div class="col-sm-8">
+                <input name="articleVideo" th:field="*{articleVideo}" type="hidden">
+                <div class="row">
+                    <div class="col-sm-12" id="photosDiv" th:if="${videos!=null && #lists.size(videos)>0}">
+                        <th:block th:each="name:${videos}">
+                            <div class="">
+                                <div class="videoBox">
+                                    <div class="">
+                                        <video autoplay style='width:600px;height:500px;' th:src="${name}"></video>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                    <div class="col-sm-12" th:if="${videos==null || #lists.size(videos)<1}">
+                        <span>暂无视频！</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">提交人姓名：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="userName" readonly th:field="*{userName}" type="text">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: summernote-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/article";
+    $("#form-article-edit").validate({
+        focusCleanup: true
+    });
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#articleTime',
+            type: 'datetime',
+            trigger: 'click'
+        });
+    });
+
+
+    $(function () {
+        $('.summernote').summernote({
+            placeholder: '请输入内容',
+            height: 250,
+            lang: 'zh-CN',
+            followingToolbar: false,
+            callbacks: {
+                onImageUpload: function (files) {
+                    sendFile(files[0], this);
+                }
+            }
+        });
+        var content = $("#articleContent").val();
+        $('#editor').summernote('code', content);
+    });
+
+    // 上传文件
+    function sendFile(file, obj) {
+        var data = new FormData();
+        data.append("file", file);
+        $.ajax({
+            type: "POST",
+            url: ctx + "common/upload",
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    $(obj).summernote('editor.insertImage', result.url, result.fileName);
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+            },
+            error: function (error) {
+                $.modal.alertWarning("图片上传失败。");
+            }
+        });
+    }
+
+
+    var picArr = new Array();
+
+    var pic = $("#articleImg").val();
+    if (null != pic && pic.length > 0) {
+        picArr = pic.split(",");
+        for (var i = 0; i < picArr.length; i++) {
+            $('#showPrew').append("<div class='imgDiv' id='" + i + "'><img src='" + picArr[i] + "' style='width:180px;height:180px;border:1px solid #000;margin:20px;' onclick='previewImg(this)'><a href='#' onclick='removeImg(" + i + ")'><img src='../../../img/delete.png' class='deleteImg' th:src='@{/img/delete.png}' /></a></div>");
+
+        }
+    }
+
+    //上传图片
+    layui.use(['upload'], function () {
+        var $ = layui.jquery
+            , upload = layui.upload;
+
+        var showUpload = upload.render({
+            elem: '#showBtn'
+            , url: ctx + "common/uploadImage_QiNiu"
+            , size: 10000
+            , multiple: true
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#showPrew').append("<div class='showDiv' id='" + i + "'><img src='" + result + "' style='width:180px;height:180px;border:1px solid #000;margin:20px;' onclick='previewImg(this)'><a href='#' onclick='removeImg(" + i + ")'><img src='../../../img/delete.png' class='showImg'/></a></div>");
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                var picStr = res.data.src;
+                picArr.push(picStr);
+
+                var pic = picArr.join(",");
+                console.log("***" + pic);
+                $("#articleImg").val(pic);
+
+            }, error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#showText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    showUpload.upload();
+                });
+            }
+        });
+    });
+
+
+    function removeImg(id) {
+        $.modal.confirm("确认要删除选中的图片吗?", function () {
+            $("#" + id).remove();
+            picArr.splice(id, 1); //删除图片数组中的图片
+            var pic = picArr.join(",");
+            $("#articleImg").val(pic);
+        });
+    }
+
+    function previewImg(obj) {
+        var img = new Image();
+        img.src = obj.src;
+        var imgHtml = "<img src='" + obj.src + "' width='600px' height='600px'/>";
+        //弹出层
+        layer.open({
+            type: 1,
+            shade: 0.8,
+            offset: 'auto',
+            area: [600 + 'px', 600 + 'px'],
+            shadeClose: true,
+            scrollbar: false,
+            title: "图片预览", //不显示标题
+            content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            cancel: function () {
+                //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+            }
+        });
+    }
+
+    //鼠标划过事件
+    $(".imgDiv").mouseover(function () {
+        //显示删除叉
+        $(this).find(".deleteImg").css("display", "block");
+    });
+    $(".imgDiv").mouseout(function () {
+        //隐藏删除叉
+        $(this).find(".deleteImg").css("display", "none");
+    });
+
+    //鼠标划过事件
+    $(".showDiv").mouseover(function () {
+        //显示删除叉
+        $(this).find(".showImg").css("display", "block");
+    });
+    $(".showDiv").mouseout(function () {
+        //隐藏删除叉
+        $(this).find(".showImg").css("display", "none");
+    });
+
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var sHTML = $('.summernote').summernote('code');
+            $("#articleContent").val(sHTML);
+            $.operate.save(prefix + "/edit", $('#form-article-edit').serialize());
+        }
+    }
+
+</script>
+</body>
+</html>

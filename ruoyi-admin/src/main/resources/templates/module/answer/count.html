@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('试卷答案列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>试卷名称：</label>
+                            <input name="name" type="text"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('module:answer:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('module:answer:remove')}]];
+    var datas = [[${@dict.getType('tb_pager_publish')}]];
+    var confirms = [[${@dict.getType('tb_confirm_status')}]];
+    var prefix = ctx + "module/answer";
+    var pagerPrefix = ctx + "module/pager";
+
+    $(function () {
+        var options = {
+            url: pagerPrefix + "/list",
+            modalName: "试卷",
+            detailView: true,
+            showFooter: false,
+            showToggle: false,
+            showColumns: false,
+            showSearch: false,
+            showRefresh: false,
+            onExpandRow: function (index, row, $detail) {
+                initChildTable(index, row, $detail);
+            },
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'name',
+                    title: '试卷名称',
+                    width: 700
+                },
+                {
+                    field: 'ksTime',
+                    title: '考试时间(分钟)'
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    },
+                    visible: false
+
+                }]
+        };
+        $.table.init(options);
+    });
+
+    initChildTable = function (index, row, $detail) {
+        var childTable = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+        $(childTable).bootstrapTable({
+            url: prefix + "/countList",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "试卷答案",
+            method: 'post',
+            sidePagination: "server",
+            contentType: "application/x-www-form-urlencoded",
+            queryParams: {
+                pagerId: row.id
+            },
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'pagerId',
+                    title: '试卷id',
+                    visible: false
+                },
+                {
+                    field: 'pagerName',
+                    title: '试卷名称',
+                    visible: false
+                },
+                {
+                    field: 'userId',
+                    visible: false
+                },
+                {
+                    field: 'userName',
+                    title: '考试人名称'
+                },
+                {
+                    field: 'mark',
+                    title: '得分',
+                    formatter: function (value, row, index) {
+                        return row.mark + "/" + row.totalScore;
+                    }
+                },
+                {
+                    field: 'rightCount',
+                    title: '做对题目数',
+                    formatter: function (value, row, index) {
+                        return row.rightCount + "/" + row.totalCount;
+                    }
+                },
+                {
+                    field: 'errorCount',
+                    title: '做错题目数',
+                    formatter: function (value, row, index) {
+                        return row.errorCount + "/" + row.totalCount;
+                    }
+                },
+                {
+                    field: 'errorCount',
+                    title: '待批改题目数',
+                    formatter: function (value, row, index) {
+                        return row.answerCount + "/" + row.totalCount;
+                    }
+                },
+                {
+                    field: 'confirm',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(confirms, value);
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="look(\'' + row.pagerId + '\',\'' + row.userId + '\')"><i class="fa fa-edit"></i>查看答卷</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="editPager(\'' + row.pagerId + '\',\'' + row.userId + '\')"><i class="fa fa-edit"></i>批改答卷</a> ');
+                        if (row.confirm == '0') {
+                            actions.push('<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="confirm(\'' + row.pagerId + '\',\'' + row.userId + '\',\'' + row.answerCount + '\')"><i class="fa fa-edit"></i>确认分数</a> ');
+                        }
+
+                        return actions.join('');
+                    }
+                }]
+        });
+    };
+
+    function look(pagerId, userId) {
+        var url = prefix + "/lookPager?pagerId=" + pagerId + "&userId=" + userId;
+        $.modal.openTab("试卷详情", url);
+    }
+
+    function editPager(pagerId, userId) {
+        var url = prefix + "/editPager?pagerId=" + pagerId + "&userId=" + userId;
+        $.modal.openTab("试卷详情", url);
+    }
+
+    function confirm(pagerId, userId, count) {
+        console.log(count);
+        if (count != '0') {
+            $.modal.alertWarning("还有未批改答卷，请先批改答卷");
+            return;
+        }
+
+        $.modal.confirm("分数是否正确？", function () {
+            var url = ctx + "module/pageruser/confirm";
+            var data = {
+                "userId": userId,
+                "pagerId": pagerId
+            };
+            $.operate.submit(url, "post", "json", data);
+        })
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <th:block th:include="include :: header('进度条')"/>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>进度条 (Progress Bars)</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="javascript:;">选项1</a>
+                            </li>
+                            <li><a href="javascript:;">选项2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <!-- style: progress-bar-success/progress-bar-info/progress-bar-warning/progress-bar-danger -->
+                    <h5>基本</h5>
+                    <div class="progress">
+                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="35"
+                             class="progress-bar progress-bar-success"
+                             role="progressbar" style="width: 35%">
+                            <span class="sr-only">35% Complete (success)</span>
+                        </div>
+                    </div>
+
+                    <div class="progress progress-bar-default">
+                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="43" class="progress-bar"
+                             role="progressbar" style="width: 43%">
+                            <span class="sr-only">43% Complete (success)</span>
+                        </div>
+                    </div>
+
+                    <h5>条纹效果</h5>
+                    <div class="progress progress-striped">
+                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="50"
+                             class="progress-bar progress-bar-warning"
+                             role="progressbar" style="width: 50%">
+                            <span class="sr-only">50% Complete (success)</span>
+                        </div>
+                    </div>
+
+                    <h5>动画效果</h5>
+                    <div class="progress progress-striped active">
+                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="75"
+                             class="progress-bar progress-bar-danger"
+                             role="progressbar" style="width: 75%">
+                            <span class="sr-only">75% Complete (success)</span>
+                        </div>
+                    </div>
+
+                    <h5>堆叠效果</h5>
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar progress-bar-success" style="width: 30%">
+                            <span class="sr-only">30% Complete (success)</span>
+                        </div>
+                        <div class="progress-bar progress-bar-warning" style="width: 20%">
+                            <span class="sr-only">20% Complete (warning)</span>
+                        </div>
+                        <div class="progress-bar progress-bar-danger" style="width: 40%">
+                            <span class="sr-only">40% Complete (danger)</span>
+                        </div>
+                    </div>
+
+                    <h5>带有提示标签的进度条</h5>
+                    <div class="progress">
+                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="95" class="progress-bar"
+                             role="progressbar" style="width: 95%;">
+                            95%
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    $("[data-toggle='tooltip']").tooltip();
+    $("[data-toggle=popover]").popover();
+</script>
+</body>
+</html>

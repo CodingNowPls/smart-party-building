@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增任务')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-work-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">标题：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="title" required type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">等级：</label>
+            <div class="col-sm-8">
+                <select class="form-control m-b" name="grade" required th:with="type=${@dict.getType('tb_work_grade')}">
+                    <option value="">请选择</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">开始时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input class="form-control" id="startTime" name="startTime" placeholder="yyyy-MM-dd HH:mm"
+                           required type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">截至时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input class="form-control" id="endTime" name="endTime" placeholder="yyyy-MM-dd HH:mm" required
+                           type="text">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">说明：</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" name="introduce" rows="5"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">分配给：</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="distName" name="distName" type="hidden">
+                <select class="form-control m-b select2-multiple" id="distIds" multiple name="distIds">
+                    <option value="">请选择</option>
+                    <option th:each="user:${userList}" th:text="${user.userName}" th:value="${user.userId}"
+                    />
+                </select>
+            </div>
+        </div>
+        <!--<div class="form-group">-->
+        <!--<label class="col-sm-3 control-label">分值：</label>-->
+        <!--<div class="col-sm-8">-->
+        <!--<input name="score" class="form-control" type="number">-->
+        <!--</div>-->
+        <!--</div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">文件：</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="workFile" name="workFile" type="hidden">
+                <div class="file-loading">
+                    <input data-min-file-count="1" id="fileinput-demo-1" name="file" type="file">
+                </div>
+            </div>
+        </div>
+        <input name="status" type="hidden" value="1">
+
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<th:block th:include="include :: select2-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/work"
+    $("#form-work-add").validate({
+        focusCleanup: true
+    });
+
+
+    $("input[name='startTime']").datetimepicker({
+        autoclose: true
+    });
+
+    $("input[name='endTime']").datetimepicker({
+        autoclose: true
+    });
+
+    function getName() {
+        var distName = $("#distId").find("option:selected").text();
+        $("#distName").val(distName);
+    }
+
+    //上传文件
+    var uploadUrl = ctx + "common/uploadImage_QiNiu";
+
+    $(document).ready(function () {
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': uploadUrl,
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            initialPreview: []
+        });
+
+        var result = "";
+        // 上传成功回调
+        $("#fileinput-demo-1").on("fileuploaded", function (event, data, previewId, index) {
+            result = data.response.data.src;
+            $("#workFile").val(result);
+        });
+    });
+
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-work-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

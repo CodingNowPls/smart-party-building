@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('学习列表')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-west">
+    <div class="box box-main">
+        <div class="box-header">
+            <div class="box-title">
+                <i class="fa icon-grid"></i> 组织机构
+            </div>
+            <div class="box-tools pull-right">
+                <a class="btn btn-box-tool" href="#" onclick="dept()" title="管理部门" type="button"><i
+                        class="fa fa-edit"></i></a>
+                <button class="btn btn-box-tool" id="btnExpand" style="display:none;" title="展开" type="button"><i
+                        class="fa fa-chevron-up"></i></button>
+                <button class="btn btn-box-tool" id="btnCollapse" title="折叠" type="button"><i
+                        class="fa fa-chevron-down"></i></button>
+                <button class="btn btn-box-tool" id="btnRefresh" title="刷新部门" type="button"><i
+                        class="fa fa-refresh"></i></button>
+            </div>
+        </div>
+        <div class="ui-layout-content">
+            <div class="ztree" id="tree"></div>
+        </div>
+    </div>
+</div>
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <input id="deptId" name="deptId" type="hidden">
+                    <input id="parentId" name="parentId" type="hidden">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>用户姓名：</label>
+                                <input name="userName" type="text"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('module:learn:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('module:learn:remove')}]];
+    var prefix = ctx + "module/learn";
+
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        queryUserList();
+        queryDeptTree();
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/userList",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "学习",
+            showFooter: true,
+            showExport: false,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'userName',
+                    title: '成员姓名'
+                },
+                {
+                    field: 'deptName',
+                    title: '所在小组'
+                },
+                {
+                    field: 'score',
+                    title: '获得学分',
+                    footerFormatter: function (value) {
+                        var sum = 0;
+                        if (value.length > 0) {
+                            for (var i in value) {
+                                sum += parseFloat(value[i].score);
+                            }
+                            return "学分总计：" + sum;
+                        }
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="look(\'' + row.userId + '\')"><i class="fa fa-edit"></i>查看详情</a> ');
+                        // actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+
+    function queryDeptTree() {
+        var url = ctx + "system/dept/treeDataAll";
+        var options = {
+            url: url,
+            expandLevel: 2,
+            onClick: zOnClick
+        };
+        $.tree.init(options);
+
+        function zOnClick(event, treeId, treeNode) {
+            $("#deptId").val(treeNode.id);
+            $("#parentId").val(treeNode.pId);
+            $.table.search();
+        }
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+    $('#btnRefresh').click(function () {
+        queryDeptTree();
+    });
+
+    function look(userId) {
+        var url = ctx + "module/learn?userId=" + userId;
+        var index = layer.open({
+            type: 2,
+            title: "学分详情",
+            area: [($(window).width() - $(window).width() * 0.4) + 'px', ($(window).height() - 50) + 'px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            content: url,
+            btn: ['关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function (index, layero) {
+                layer.close(index);
+            }
+        });
+    }
+</script>
+</body>
+</html>

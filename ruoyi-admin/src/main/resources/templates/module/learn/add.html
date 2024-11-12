@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增学习')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-learn-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">用户id：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="userId" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">用户姓名：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="userName" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">学分类型 (1 学习 2 签到)：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="type" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">资讯id：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="newId" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">学习状态 (1 未学习 2 已学习)：</label>
+            <div class="col-sm-8">
+                <div class="radio-box">
+                    <input name="status" type="radio" value="">
+                    <label th:for="status" th:text="未知"></label>
+                </div>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">学分：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="score" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">签到时间：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="signTime" type="text">
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/learn"
+    $("#form-learn-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-learn-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

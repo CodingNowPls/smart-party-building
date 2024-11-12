@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.controller.module.answer.mapper.PagerAnswerMapper">
+
+    <resultMap type="PagerAnswer" id="PagerAnswerResult">
+        <result property="id" column="id"/>
+        <result property="pagerId" column="pager_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="answer" column="answer"/>
+        <result property="isRight" column="is_right"/>
+        <result property="mark" column="mark"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="pagerName" column="pager_name"/>
+        <result property="userName" column="user_name"/>
+        <result property="totalScore" column="total_score"/>
+        <result property="totalCount" column="total_count"/>
+        <result property="rightCount" column="right_count"/>
+        <result property="errorCount" column="error_count"/>
+        <result property="answerCount" column="answer_count"/>
+        <result property="rightAnswer" column="right_answer"/>
+        <result property="confirm" column="confirm"/>
+        <association property="question" column="id" javaType="Question" resultMap="QuestionResult"/>
+    </resultMap>
+
+    <resultMap type="Question" id="QuestionResult">
+        <result property="id" column="id"/>
+        <result property="typeId" column="type_id"/>
+        <result property="typeName" column="type_name"/>
+        <result property="questionType" column="question_type"/>
+        <result property="title" column="title"/>
+        <result property="answerA" column="answer_a"/>
+        <result property="answerB" column="answer_b"/>
+        <result property="answerC" column="answer_c"/>
+        <result property="answerD" column="answer_d"/>
+        <result property="answerE" column="answer_e"/>
+        <result property="answer" column="answer"/>
+        <result property="introduce" column="introduce"/>
+        <result property="score" column="score"/>
+        <result property="pagerName" column="pager_name"/>
+        <result property="ksTime" column="ks_time"/>
+    </resultMap>
+
+
+    <sql id="selectPagerAnswerVo">
+        select id,
+               pager_id,
+               question_id,
+               user_id,
+               answer,
+               is_right,
+               mark,
+               status,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from tb_pager_answer
+    </sql>
+
+    <select id="selectPagerAnswerList" parameterType="PagerAnswer" resultMap="PagerAnswerResult">
+        <include refid="selectPagerAnswerVo"/>
+        <where>
+            <if test="pagerId != null ">and pager_id = #{pagerId}</if>
+            <if test="questionId != null ">and question_id = #{questionId}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="answer != null  and answer != ''">and answer = #{answer}</if>
+            <if test="isRight != null  and isRight != ''">and is_right = #{isRight}</if>
+            <if test="mark != null ">and mark = #{mark}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectPagerAnswerById" parameterType="Long" resultMap="PagerAnswerResult">
+        <include refid="selectPagerAnswerVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPagerAnswer" parameterType="PagerAnswer" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_pager_answer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pagerId != null ">pager_id,</if>
+            <if test="questionId != null ">question_id,</if>
+            <if test="userId != null ">user_id,</if>
+            <if test="answer != null  and answer != ''">answer,</if>
+            <if test="isRight != null  and isRight != ''">is_right,</if>
+            <if test="mark != null ">mark,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pagerId != null ">#{pagerId},</if>
+            <if test="questionId != null ">#{questionId},</if>
+            <if test="userId != null ">#{userId},</if>
+            <if test="answer != null  and answer != ''">#{answer},</if>
+            <if test="isRight != null  and isRight != ''">#{isRight},</if>
+            <if test="mark != null ">#{mark},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertPagerBatch">
+        insert into tb_pager_answer(pager_id, question_id, user_id, answer, is_right, mark, status, create_by,
+        create_time) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.pagerId},#{item.questionId},#{item.userId},#{item.answer},#{item.isRight},#{item.mark},#{item.status},#{item.createBy},#{item.createTime})
+        </foreach>
+    </insert>
+
+    <update id="updatePagerAnswer" parameterType="PagerAnswer">
+        update tb_pager_answer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pagerId != null ">pager_id = #{pagerId},</if>
+            <if test="questionId != null ">question_id = #{questionId},</if>
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="answer != null  and answer != ''">answer = #{answer},</if>
+            <if test="isRight != null  and isRight != ''">is_right = #{isRight},</if>
+            <if test="mark != null ">mark = #{mark},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePagerAnswerById" parameterType="Long">
+        delete
+        from tb_pager_answer
+        where id = #{id}
+    </delete>
+
+    <delete id="deletePagerAnswerByIds" parameterType="String">
+        delete from tb_pager_answer where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTotal" parameterType="PagerAnswer" resultMap="PagerAnswerResult">
+        SELECT *
+        FROM
+        (SELECT
+        a.pager_id AS pager_id,
+        a.user_id AS user_id,
+        p.name AS pager_name,
+        u.user_name AS user_name,
+        ifnull( sum( a.mark ), 0 ) AS mark,
+        ifnull( sum( q.score ), 0 ) AS total_score,
+        count( 1 ) AS total_count,
+        ifnull( sum( CASE WHEN is_right = '1' THEN 1 ELSE 0 END ), 0 ) AS right_count,
+        ifnull( sum( CASE WHEN is_right = '2' THEN 1 ELSE 0 END ), 0 ) AS error_count,
+        ifnull( sum( CASE WHEN is_right = '3' THEN 1 ELSE 0 END ), 0 ) AS answer_count,
+        ( SELECT confirm FROM tb_pager_user WHERE pager_id = a.pager_id AND user_id = a.user_id ) AS confirm
+        FROM
+        tb_pager_answer a
+        LEFT JOIN tb_pager p ON p.id = a.pager_id
+        LEFT JOIN sys_user u ON u.user_id = a.user_id
+        LEFT JOIN tb_question q ON q.id = a.question_id
+        <where>
+            <if test="pagerId != null ">and a.pager_id = #{pagerId}</if>
+            <if test="userId != null ">and a.user_id = #{userId}</if>
+        </where>
+        GROUP BY
+        a.pager_id,a.user_id ) p
+        <where>
+            <if test="confirm != null ">and confirm = #{confirm}</if>
+        </where>
+
+    </select>
+
+
+    <select id="selectPagerAnswerByPagerId" parameterType="PagerAnswer" resultMap="PagerAnswerResult">
+        SELECT
+        p.name AS pager_name,
+        p.ks_time AS ks_time,
+        q.question_type,
+        q.title,
+        q.answer_a,
+        q.answer_b,
+        q.answer_c,
+        q.answer_d,
+        q.answer AS right_answer,
+        q.introduce,
+        q.score,
+        a.id,
+        a.user_id,
+        a.is_right,
+        a.mark,
+        a.answer
+        FROM
+        tb_pager_answer a
+        LEFT JOIN tb_pager p ON p.id = a.pager_id
+        LEFT JOIN tb_question q ON q.id = a.question_id
+        <where>
+            <if test="pagerId != null ">and a.pager_id = #{pagerId}</if>
+            <if test="userId != null ">and a.user_id = #{userId}</if>
+        </where>
+        ORDER BY
+        q.question_type ASC,
+        q.create_time DESC
+    </select>
+
+</mapper>
