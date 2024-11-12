@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.party.building.flow.mapper.WorkFlowMapper">
+
+    <resultMap type="com.ruoyi.party.building.flow.domain.WorkFlow" id="WorkFlowResult">
+        <result property="flowId" column="flow_id"/>
+        <result property="workId" column="work_id"/>
+        <result property="distId" column="dist_id"/>
+        <result property="dealId" column="deal_id"/>
+        <result property="dealName" column="deal_name"/>
+        <result property="currentStatus" column="current_status"/>
+        <result property="level" column="level"/>
+        <result property="dealStatus" column="deal_status"/>
+        <result property="actionName" column="action_name"/>
+        <result property="dealExplain" column="deal_explain"/>
+        <result property="dealTime" column="deal_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectWorkFlowVo">
+        select flow_id,
+               work_id,
+               dist_id,
+               deal_id,
+               deal_name,
+               current_status,
+               level,
+               deal_status,
+               action_name,
+               deal_explain,
+               deal_time,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from tb_work_flow
+    </sql>
+
+    <select id="selectWorkFlowList" parameterType="WorkFlow" resultMap="WorkFlowResult">
+        <include refid="selectWorkFlowVo"/>
+        <where>
+            <if test="workId != null ">and work_id = #{workId}</if>
+            <if test="distId != null ">and dist_id = #{distId}</if>
+            <if test="dealId != null ">and deal_id = #{dealId}</if>
+            <if test="dealName != null  and dealName != ''">and deal_name like concat('%', #{dealName}, '%')</if>
+            <if test="currentStatus != null  and currentStatus != ''">and current_status = #{currentStatus}</if>
+            <if test="level != null  and level != ''">and level = #{level}</if>
+            <if test="dealStatus != null  and dealStatus != ''">and deal_status = #{dealStatus}</if>
+            <if test="actionName != null  and actionName != ''">and action_name like concat('%', #{actionName}, '%')
+            </if>
+            <if test="dealExplain != null  and dealExplain != ''">and deal_explain = #{dealExplain}</if>
+            <if test="dealTime != null ">and deal_time = #{dealTime}</if>
+        </where>
+    </select>
+
+    <select id="selectWorkFlowById" parameterType="Long" resultMap="WorkFlowResult">
+        <include refid="selectWorkFlowVo"/>
+        where flow_id = #{flowId}
+    </select>
+
+    <insert id="insertWorkFlow" parameterType="WorkFlow" useGeneratedKeys="true" keyProperty="flowId">
+        insert into tb_work_flow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workId != null ">work_id,</if>
+            <if test="distId != null ">dist_id,</if>
+            <if test="dealId != null ">deal_id,</if>
+            <if test="dealName != null  and dealName != ''">deal_name,</if>
+            <if test="currentStatus != null  and currentStatus != ''">current_status,</if>
+            <if test="level != null  and level != ''">level,</if>
+            <if test="dealStatus != null  and dealStatus != ''">deal_status,</if>
+            <if test="actionName != null  and actionName != ''">action_name,</if>
+            <if test="dealExplain != null  and dealExplain != ''">deal_explain,</if>
+            <if test="dealTime != null ">deal_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workId != null ">#{workId},</if>
+            <if test="distId != null ">#{distId},</if>
+            <if test="dealId != null ">#{dealId},</if>
+            <if test="dealName != null  and dealName != ''">#{dealName},</if>
+            <if test="currentStatus != null  and currentStatus != ''">#{currentStatus},</if>
+            <if test="level != null  and level != ''">#{level},</if>
+            <if test="dealStatus != null  and dealStatus != ''">#{dealStatus},</if>
+            <if test="actionName != null  and actionName != ''">#{actionName},</if>
+            <if test="dealExplain != null  and dealExplain != ''">#{dealExplain},</if>
+            <if test="dealTime != null ">#{dealTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateWorkFlow" parameterType="WorkFlow">
+        update tb_work_flow
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workId != null ">work_id = #{workId},</if>
+            <if test="distId != null ">dist_id = #{distId},</if>
+            <if test="dealId != null ">deal_id = #{dealId},</if>
+            <if test="dealName != null  and dealName != ''">deal_name = #{dealName},</if>
+            <if test="currentStatus != null  and currentStatus != ''">current_status = #{currentStatus},</if>
+            <if test="level != null  and level != ''">level = #{level},</if>
+            <if test="dealStatus != null  and dealStatus != ''">deal_status = #{dealStatus},</if>
+            <if test="actionName != null  and actionName != ''">action_name = #{actionName},</if>
+            <if test="dealExplain != null  and dealExplain != ''">deal_explain = #{dealExplain},</if>
+            <if test="dealTime != null ">deal_time = #{dealTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where flow_id = #{flowId}
+    </update>
+
+    <delete id="deleteWorkFlowById" parameterType="Long">
+        delete
+        from tb_work_flow
+        where flow_id = #{flowId}
+    </delete>
+
+    <delete id="deleteWorkFlowByIds" parameterType="String">
+        delete from tb_work_flow where flow_id in
+        <foreach item="flowId" collection="array" open="(" separator="," close=")">
+            #{flowId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -64,6 +64,10 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-party-building</artifactId>
+        </dependency>
 
     </dependencies>
 

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.party.building.upload.mapper.NewsUploadMapper">
+
+    <resultMap type="NewsUpload" id="NewsUploadResult">
+        <result property="id" column="id"/>
+        <result property="newId" column="new_id"/>
+        <result property="newFile" column="new_file"/>
+        <result property="newVideo" column="new_video"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectNewsUploadVo">
+        select id,
+               new_id,
+               new_file,
+               new_video,
+               status,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from tb_news_upload
+    </sql>
+
+    <select id="selectNewsUploadList" parameterType="NewsUpload" resultMap="NewsUploadResult">
+        <include refid="selectNewsUploadVo"/>
+        <where>
+            <if test="newId != null ">and new_id = #{newId}</if>
+            <if test="newFile != null  and newFile != ''">and new_file = #{newFile}</if>
+            <if test="newVideo != null  and newVideo != ''">and new_video = #{newVideo}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectNewsUploadById" parameterType="Long" resultMap="NewsUploadResult">
+        <include refid="selectNewsUploadVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertNewsUpload" parameterType="NewsUpload" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_news_upload
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="newId != null ">new_id,</if>
+            <if test="newFile != null  and newFile != ''">new_file,</if>
+            <if test="newVideo != null  and newVideo != ''">new_video,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="newId != null ">#{newId},</if>
+            <if test="newFile != null  and newFile != ''">#{newFile},</if>
+            <if test="newVideo != null  and newVideo != ''">#{newVideo},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateNewsUpload" parameterType="NewsUpload">
+        update tb_news_upload
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="newId != null ">new_id = #{newId},</if>
+            <if test="newFile != null  and newFile != ''">new_file = #{newFile},</if>
+            <if test="newVideo != null  and newVideo != ''">new_video = #{newVideo},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewsUploadById" parameterType="Long">
+        delete
+        from tb_news_upload
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteNewsUploadByIds" parameterType="String">
+        delete from tb_news_upload where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

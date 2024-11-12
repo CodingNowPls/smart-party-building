@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.party.building.plan.mapper.PlanMapper">
+
+    <resultMap type="Plan" id="PlanResult">
+        <result property="planId" column="plan_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="planTime" column="plan_time"/>
+        <result property="planTitle" column="plan_title"/>
+        <result property="planContent" column="plan_content"/>
+        <result property="planImg" column="plan_img"/>
+        <result property="planVideo" column="plan_video"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectPlanVo">
+        select p.plan_id,
+               p.dept_id,
+               d.dept_name as dept_name,
+               p.user_id,
+               u.user_name,
+               p.plan_time,
+               p.plan_title,
+               p.plan_content,
+               p.plan_img,
+               p.plan_video,
+               p.status,
+               p.create_by,
+               p.create_time,
+               p.update_by,
+               p.update_time,
+               p.remark
+        from tb_plan p
+                 left join sys_user u on u.user_id = p.user_id
+                 left join sys_dept d on d.dept_id = p.dept_id
+    </sql>
+
+    <select id="selectPlanList" parameterType="Plan" resultMap="PlanResult">
+        <include refid="selectPlanVo"/>
+        <where>
+            <if test="deptId != null ">and p.dept_id = #{deptId}</if>
+            <if test="userId != null ">and p.user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''">and u.user_name like concat('%', #{userName}, '%')</if>
+            <if test="planTime != null ">and p.plan_time = #{planTime}</if>
+            <if test="planTitle != null  and planTitle != ''">and p.plan_title like concat('%', #{planTitle}, '%')</if>
+            <if test="planContent != null  and planContent != ''">and p.plan_content = #{planContent}</if>
+            <if test="planImg != null  and planImg != ''">and p.plan_img = #{planImg}</if>
+            <if test="planVideo != null  and planVideo != ''">and p.plan_video = #{planVideo}</if>
+            <if test="status != null  and status != ''">and p.status = #{status}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+        order by p.create_time desc
+    </select>
+
+    <select id="selectPlanById" parameterType="Long" resultMap="PlanResult">
+        <include refid="selectPlanVo"/>
+        where p.plan_id = #{planId}
+    </select>
+
+    <insert id="insertPlan" parameterType="Plan" useGeneratedKeys="true" keyProperty="planId">
+        insert into tb_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null ">dept_id,</if>
+            <if test="userId != null ">user_id,</if>
+            <if test="userName != null  and userName != ''">user_name,</if>
+            <if test="planTime != null ">plan_time,</if>
+            <if test="planTitle != null  and planTitle != ''">plan_title,</if>
+            <if test="planContent != null  and planContent != ''">plan_content,</if>
+            <if test="planImg != null  and planImg != ''">plan_img,</if>
+            <if test="planVideo != null  and planVideo != ''">plan_video,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="userId != null ">#{userId},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="planTime != null ">#{planTime},</if>
+            <if test="planTitle != null  and planTitle != ''">#{planTitle},</if>
+            <if test="planContent != null  and planContent != ''">#{planContent},</if>
+            <if test="planImg != null  and planImg != ''">#{planImg},</if>
+            <if test="planVideo != null  and planVideo != ''">#{planVideo},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePlan" parameterType="Plan">
+        update tb_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null ">dept_id = #{deptId},</if>
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="userName != null  and userName != ''">user_name = #{userName},</if>
+            <if test="planTime != null ">plan_time = #{planTime},</if>
+            <if test="planTitle != null  and planTitle != ''">plan_title = #{planTitle},</if>
+            <if test="planContent != null  and planContent != ''">plan_content = #{planContent},</if>
+            <if test="planImg != null  and planImg != ''">plan_img = #{planImg},</if>
+            <if test="planVideo != null  and planVideo != ''">plan_video = #{planVideo},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where plan_id = #{planId}
+    </update>
+
+    <delete id="deletePlanById" parameterType="Long">
+        delete
+        from tb_plan
+        where plan_id = #{planId}
+    </delete>
+
+    <delete id="deletePlanByIds" parameterType="String">
+        delete from tb_plan where plan_id in
+        <foreach item="planId" collection="array" open="(" separator="," close=")">
+            #{planId}
+        </foreach>
+    </delete>
+
+</mapper>

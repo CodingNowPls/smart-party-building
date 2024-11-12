@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.party.building.feel.mapper.FeelMapper">
+
+    <resultMap type="Feel" id="FeelResult">
+        <result property="feelId" column="feel_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="feelTime" column="feel_time"/>
+        <result property="feelTitle" column="feel_title"/>
+        <result property="feelContent" column="feel_content"/>
+        <result property="feelImg" column="feel_img"/>
+        <result property="feelVideo" column="feel_video"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectFeelVo">
+        select f.feel_id,
+               f.dept_id,
+               d.dept_name,
+               f.user_id,
+               u.user_name,
+               f.feel_time,
+               f.feel_title,
+               f.feel_content,
+               f.feel_img,
+               f.feel_video,
+               f.status,
+               f.create_by,
+               f.create_time,
+               f.update_by,
+               f.update_time,
+               f.remark
+        from tb_feel f
+                 left join sys_user u on u.user_id = f.user_id
+                 left join sys_dept d on d.dept_id = f.dept_id
+    </sql>
+
+    <select id="selectFeelList" parameterType="Feel" resultMap="FeelResult">
+        <include refid="selectFeelVo"/>
+        <where>
+            <if test="deptId != null ">and f.dept_id = #{deptId}</if>
+            <if test="userId != null ">and f.user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''">and u.user_name like concat('%', #{userName}, '%')</if>
+            <if test="feelTime != null ">and f.feel_time = #{feelTime}</if>
+            <if test="feelTitle != null  and feelTitle != ''">and f.feel_title like concat('%', #{feelTitle}, '%')</if>
+            <if test="feelContent != null  and feelContent != ''">and f.feel_content = #{feelContent}</if>
+            <if test="feelImg != null  and feelImg != ''">and f.feel_img = #{feelImg}</if>
+            <if test="feelVideo != null  and feelVideo != ''">and f.feel_video = #{feelVideo}</if>
+            <if test="status != null  and status != ''">and f.status = #{status}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+        order by f.create_time desc
+    </select>
+
+    <select id="selectFeelById" parameterType="Long" resultMap="FeelResult">
+        <include refid="selectFeelVo"/>
+        where f.feel_id = #{feelId}
+    </select>
+
+    <insert id="insertFeel" parameterType="Feel" useGeneratedKeys="true" keyProperty="feelId">
+        insert into tb_feel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null ">dept_id,</if>
+            <if test="userId != null ">user_id,</if>
+            <if test="userName != null  and userName != ''">user_name,</if>
+            <if test="feelTime != null ">feel_time,</if>
+            <if test="feelTitle != null  and feelTitle != ''">feel_title,</if>
+            <if test="feelContent != null  and feelContent != ''">feel_content,</if>
+            <if test="feelImg != null  and feelImg != ''">feel_img,</if>
+            <if test="feelVideo != null  and feelVideo != ''">feel_video,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="userId != null ">#{userId},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="feelTime != null ">#{feelTime},</if>
+            <if test="feelTitle != null  and feelTitle != ''">#{feelTitle},</if>
+            <if test="feelContent != null  and feelContent != ''">#{feelContent},</if>
+            <if test="feelImg != null  and feelImg != ''">#{feelImg},</if>
+            <if test="feelVideo != null  and feelVideo != ''">#{feelVideo},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateFeel" parameterType="Feel">
+        update tb_feel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null ">dept_id = #{deptId},</if>
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="userName != null  and userName != ''">user_name = #{userName},</if>
+            <if test="feelTime != null ">feel_time = #{feelTime},</if>
+            <if test="feelTitle != null  and feelTitle != ''">feel_title = #{feelTitle},</if>
+            <if test="feelContent != null  and feelContent != ''">feel_content = #{feelContent},</if>
+            <if test="feelImg != null  and feelImg != ''">feel_img = #{feelImg},</if>
+            <if test="feelVideo != null  and feelVideo != ''">feel_video = #{feelVideo},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where feel_id = #{feelId}
+    </update>
+
+    <delete id="deleteFeelById" parameterType="Long">
+        delete
+        from tb_feel
+        where feel_id = #{feelId}
+    </delete>
+
+    <delete id="deleteFeelByIds" parameterType="String">
+        delete from tb_feel where feel_id in
+        <foreach item="feelId" collection="array" open="(" separator="," close=")">
+            #{feelId}
+        </foreach>
+    </delete>
+
+</mapper>

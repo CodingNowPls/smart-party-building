@@ -3,11 +3,11 @@ package com.ruoyi.web.controller.tool;
 
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.party.building.collect.domain.Collect;
+import com.ruoyi.party.building.collect.service.ICollectService;
+import com.ruoyi.party.building.news.domain.News;
+import com.ruoyi.party.building.news.service.INewsService;
 import com.ruoyi.system.service.ISysDeptService;
-import com.ruoyi.web.controller.module.collect.domain.Collect;
-import com.ruoyi.web.controller.module.collect.service.ICollectService;
-import com.ruoyi.web.controller.module.news.domain.News;
-import com.ruoyi.web.controller.module.news.service.INewsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

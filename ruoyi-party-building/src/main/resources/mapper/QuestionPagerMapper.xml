@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.party.building.questionpager.mapper.QuestionPagerMapper">
+
+    <resultMap type="QuestionPager" id="QuestionPagerResult">
+        <result property="id" column="id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="pagerId" column="pager_id"/>
+        <result property="rank" column="rank"/>
+    </resultMap>
+
+    <sql id="selectQuestionPagerVo">
+        select id, question_id, pager_id, rank
+        from tb_question_pager
+    </sql>
+
+    <select id="selectQuestionPagerList" parameterType="QuestionPager" resultMap="QuestionPagerResult">
+        <include refid="selectQuestionPagerVo"/>
+        <where>
+            <if test="questionId != null ">and question_id = #{questionId}</if>
+            <if test="pagerId != null ">and pager_id = #{pagerId}</if>
+        </where>
+    </select>
+
+    <select id="selectQuestionPagerById" parameterType="Long" resultMap="QuestionPagerResult">
+        <include refid="selectQuestionPagerVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertQuestionPager" parameterType="QuestionPager" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_question_pager
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="questionId != null ">question_id,</if>
+            <if test="pagerId != null ">pager_id,</if>
+            <if test="rank != null ">rank,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="questionId != null ">#{questionId},</if>
+            <if test="pagerId != null ">#{pagerId},</if>
+            <if test="rank != null ">#{rank},</if>
+        </trim>
+    </insert>
+
+    <update id="updateQuestionPager" parameterType="QuestionPager">
+        update tb_question_pager
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="questionId != null ">question_id = #{questionId},</if>
+            <if test="pagerId != null ">pager_id = #{pagerId},</if>
+            <if test="rank != null ">rank = #{rank},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteQuestionPagerById" parameterType="Long">
+        delete
+        from tb_question_pager
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteQuestionPagerByPagerId" parameterType="Long">
+        delete
+        from tb_question_pager
+        where pager_id = #{pagerId}
+    </delete>
+
+
+    <delete id="deleteQuestionPagerByIds" parameterType="String">
+        delete from tb_question_pager where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="batchQutionPager">
+        insert into tb_question_pager(question_id,pager_id,rank) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.questionId},#{item.pagerId},#{item.rank})
+        </foreach>
+    </insert>
+
+</mapper>
