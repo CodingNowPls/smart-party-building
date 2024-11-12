@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.party.building.article.mapper.ArticleMapper">
 
-    <resultMap type="com.ruoyi.party.building.article.domain.Article" id="ArticleResult">
+    <resultMap type="Article" id="ArticleResult">
         <result property="articleId" column="article_id"/>
         <result property="deptId" column="dept_id"/>
         <result property="deptName" column="dept_name"/>

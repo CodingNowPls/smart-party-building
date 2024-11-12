@@ -2,7 +2,7 @@ package com.ruoyi.party.building.vote.service.impl;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.party.building.vote.doamin.VoteUserBy;
+import com.ruoyi.party.building.vote.domain.VoteUserBy;
 import com.ruoyi.party.building.vote.mapper.VoteUserByMapper;
 import com.ruoyi.party.building.vote.service.IVoteUserByService;
 import org.springframework.beans.factory.annotation.Autowired;

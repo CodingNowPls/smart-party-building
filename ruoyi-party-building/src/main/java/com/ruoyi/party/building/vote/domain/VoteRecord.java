@@ -1,8 +1,9 @@
-package com.ruoyi.party.building.vote.doamin;
+package com.ruoyi.party.building.vote.domain;
 
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * 投票记录对象 tb_vote_record
@@ -11,6 +12,7 @@ import lombok.Data;
  * @date 2020-07-01
  */
 @Data
+@ToString
 public class VoteRecord extends BaseEntity {
     private static final long serialVersionUID = 1L;
 

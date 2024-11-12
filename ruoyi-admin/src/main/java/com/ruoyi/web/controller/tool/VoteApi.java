@@ -3,10 +3,10 @@ package com.ruoyi.web.controller.tool;
 
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.party.building.vote.doamin.Vote;
-import com.ruoyi.party.building.vote.doamin.VoteRecord;
-import com.ruoyi.party.building.vote.doamin.VoteUser;
-import com.ruoyi.party.building.vote.doamin.VoteUserBy;
+import com.ruoyi.party.building.vote.domain.Vote;
+import com.ruoyi.party.building.vote.domain.VoteRecord;
+import com.ruoyi.party.building.vote.domain.VoteUser;
+import com.ruoyi.party.building.vote.domain.VoteUserBy;
 import com.ruoyi.party.building.vote.service.IVoteRecordService;
 import com.ruoyi.party.building.vote.service.IVoteService;
 import com.ruoyi.party.building.vote.service.IVoteUserByService;

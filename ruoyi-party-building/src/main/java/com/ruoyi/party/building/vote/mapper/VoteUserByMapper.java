@@ -1,6 +1,6 @@
 package com.ruoyi.party.building.vote.mapper;
 
-import com.ruoyi.party.building.vote.doamin.VoteUserBy;
+import com.ruoyi.party.building.vote.domain.VoteUserBy;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.ruoyi.party.building.vote.service;
 
-import com.ruoyi.party.building.vote.doamin.VoteUser;
+import com.ruoyi.party.building.vote.domain.VoteUser;
 
 import java.util.List;
 

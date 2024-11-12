@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.tool;
 
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.party.building.collect.domain.Collect;
 import com.ruoyi.party.building.collect.service.ICollectService;
 import com.ruoyi.party.building.news.domain.News;
@@ -97,35 +98,35 @@ public class AppController extends BaseController {
     @ResponseBody
     public AjaxResult getDeptPicture() {
         List<DeptInfo> infoList = new ArrayList<>();
-        //SysDept dept = new SysDept();
-        //dept.setStatus("0");
-        ////获取所有数据
-        //List<SysDept> allList = deptService.selectDeptList(dept);
-        //List<DeptInfo> rootList = new ArrayList<>();
-        //if (allList != null && allList.size() > 0) {
-        //    for (SysDept dept1 : allList) {
-        //
-        //        DeptInfo d = new DeptInfo();
-        //        d.setId(dept1.getDeptId());
-        //        d.setName(dept1.getDeptName());
-        //        d.setParentId(dept1.getParentId());
-        //        rootList.add(d);
-        //
-        //        //一级分类parentId是0
-        //        if (dept1.getParentId() == 0) {
-        //            DeptInfo info = new DeptInfo();
-        //            info.setId(dept1.getDeptId());
-        //            info.setName(dept1.getDeptName());
-        //            info.setParentId(dept1.getParentId());
-        //            infoList.add(info);
-        //        }
-        //
-        //    }
-        //    // 为一级菜单设置子菜单，getChild是递归调用的
-        //    for (DeptInfo info : infoList) {
-        //        info.setChildren(getChilde(info.getId(), rootList));
-        //    }
-        //}
+        SysDept dept = new SysDept();
+        dept.setStatus("0");
+        //获取所有数据
+        List<SysDept> allList = deptService.selectDeptList(dept);
+        List<DeptInfo> rootList = new ArrayList<>();
+        if (allList != null && allList.size() > 0) {
+            for (SysDept dept1 : allList) {
+
+                DeptInfo d = new DeptInfo();
+                d.setId(dept1.getDeptId());
+                d.setName(dept1.getDeptName());
+                d.setParentId(dept1.getParentId());
+                rootList.add(d);
+
+                //一级分类parentId是0
+                if (dept1.getParentId() == 0) {
+                    DeptInfo info = new DeptInfo();
+                    info.setId(dept1.getDeptId());
+                    info.setName(dept1.getDeptName());
+                    info.setParentId(dept1.getParentId());
+                    infoList.add(info);
+                }
+
+            }
+            // 为一级菜单设置子菜单，getChild是递归调用的
+            for (DeptInfo info : infoList) {
+                info.setChildren(getChilde(info.getId(), rootList));
+            }
+        }
 
         AjaxResult ajaxResult = AjaxResult.success();
         ajaxResult.put("data", infoList);

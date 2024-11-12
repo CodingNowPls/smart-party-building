@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.party.building.vote.mapper.VoteMapper">
 
-    <resultMap type="com.ruoyi.party.building.vote.doamin.Vote" id="VoteResult">
+    <resultMap type="Vote" id="VoteResult">
         <result property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>

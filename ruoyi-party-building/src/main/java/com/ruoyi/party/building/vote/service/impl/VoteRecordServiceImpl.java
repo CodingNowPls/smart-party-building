@@ -2,8 +2,8 @@ package com.ruoyi.party.building.vote.service.impl;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.party.building.vote.doamin.VoteRecord;
-import com.ruoyi.party.building.vote.doamin.VoteUser;
+import com.ruoyi.party.building.vote.domain.VoteRecord;
+import com.ruoyi.party.building.vote.domain.VoteUser;
 import com.ruoyi.party.building.vote.mapper.VoteRecordMapper;
 import com.ruoyi.party.building.vote.mapper.VoteUserByMapper;
 import com.ruoyi.party.building.vote.mapper.VoteUserMapper;

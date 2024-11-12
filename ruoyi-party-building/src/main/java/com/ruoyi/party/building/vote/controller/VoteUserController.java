@@ -6,7 +6,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.party.building.vote.doamin.VoteUser;
+import com.ruoyi.party.building.vote.domain.VoteUser;
 import com.ruoyi.party.building.vote.service.IVoteUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
