@@ -243,7 +243,7 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
-        <module>party-building</module>
+        <module>ruoyi-party-building</module>
     </modules>
     <packaging>pom</packaging>
 
