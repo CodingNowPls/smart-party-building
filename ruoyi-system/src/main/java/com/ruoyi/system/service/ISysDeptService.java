@@ -1,10 +1,10 @@
 package com.ruoyi.system.service;
 
-import java.util.List;
-
 import com.ruoyi.common.core.domain.Ztree;
 import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.domain.entity.SysRole;
+
+import java.util.List;
 
 /**
  * 部门管理 服务层
@@ -27,6 +27,8 @@ public interface ISysDeptService {
      * @return 所有部门信息
      */
     public List<Ztree> selectDeptTree(SysDept dept);
+
+    List<Ztree> selectAllDeptTree(SysDept dept);
 
     /**
      * 查询部门管理树（排除下级）
