@@ -3,7 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>ruoyi</artifactId>
+        <artifactId>smart-party-building</artifactId>
         <groupId>com.ruoyi</groupId>
         <version>4.7.9</version>
     </parent>
