@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('任务分配列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>分配给：</label>
+                            <input name="distName" type="text"/>
+                        </li>
+                        <li>
+                            <label>任务id：</label>
+                            <input name="workId" type="text"/>
+                        </li>
+                        <li>
+                            <label>分值：</label>
+                            <input name="score" type="text"/>
+                        </li>
+                        <li>
+                            <label>文件：</label>
+                            <input name="workFile" type="text"/>
+                        </li>
+                        <li>
+                            <label>状态(1 待执行 2 执行中 3 待验证 4 退回 5 已完成)：</label>
+                            <select name="status">
+                                <option value="">所有</option>
+                                <option value="-1">代码生成请选择字典属性</option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="module:dist:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="module:dist:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="module:dist:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="module:dist:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('module:dist:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('module:dist:remove')}]];
+    var prefix = ctx + "module/dist";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "任务分配",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'distId',
+                    title: '分配给id',
+                    visible: false
+                },
+                {
+                    field: 'distName',
+                    title: '分配给'
+                },
+                {
+                    field: 'workId',
+                    title: '任务id'
+                },
+                {
+                    field: 'score',
+                    title: '分值'
+                },
+                {
+                    field: 'workFile',
+                    title: '文件'
+                },
+                {
+                    field: 'status',
+                    title: '状态(1 待执行 2 执行中 3 待验证 4 退回 5 已完成)'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.distId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.distId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

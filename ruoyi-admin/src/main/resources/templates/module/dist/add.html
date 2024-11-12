@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增任务分配')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-dist-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">分配给：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="distName" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">任务id：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="workId" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">分值：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="score" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">文件：</label>
+            <div class="col-sm-8">
+                <input class="form-control" name="workFile" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">状态(1 待执行 2 执行中 3 待验证 4 退回 5 已完成)：</label>
+            <div class="col-sm-8">
+                <div class="radio-box">
+                    <input name="status" type="radio" value="">
+                    <label th:for="status" th:text="未知"></label>
+                </div>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefix = ctx + "module/dist"
+    $("#form-dist-add").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-dist-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>
