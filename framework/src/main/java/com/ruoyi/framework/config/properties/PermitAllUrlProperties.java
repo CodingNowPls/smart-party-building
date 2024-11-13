@@ -73,23 +73,7 @@ public class PermitAllUrlProperties implements InitializingBean, ApplicationCont
         }
     }
 
-    private List<String> rebuildUrl(String[] bases, String[] uris) {
-        List<String> urls = new ArrayList<>();
-        for (String base : bases) {
-            if (uris.length > 0) {
-                for (String uri : uris) {
-                    urls.add(prefix(base) + prefix(uri));
-                }
-            } else {
-                urls.add(prefix(base));
-            }
-        }
-        return urls;
-    }
 
-    private String prefix(String seg) {
-        return seg.startsWith("/") ? seg : "/" + seg;
-    }
 
     @Override
     public void setApplicationContext(ApplicationContext context) throws BeansException {
