@@ -28,25 +28,12 @@
 </head>
 <body class="signin">
 <div class="signinpanel">
-    <div class="row">
-        <!--<div class="col-sm-8">-->
-        <!--<div class="signin-info">-->
-        <!--<div class="logopanel m-b">-->
-        <!--&lt;!&ndash;<h1><img alt="[ 若依 ]" src="../static/ruoyi.png" th:src="@{/ruoyi.png}"></h1>&ndash;&gt;-->
-        <!--</div>-->
-        <!--<div class="m-b"></div>-->
-        <!--<h3>欢迎使用 <strong>智慧党建 后台管理系统</strong></h3>-->
-        <!--<ul class="m-b">-->
-        <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> SpringBoot</li>-->
-        <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Mybatis</li>-->
-        <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Shiro</li>-->
-        <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Thymeleaf</li>-->
-        <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Bootstrap</li>-->
-        <!--</ul>-->
-        <!--<strong th:if="${@config.getKey('sys.account.registerUser')}">还没有账号？ <a th:href="@{/register}">立即注册&raquo;</a></strong>-->
-        <!--</div>-->
-        <!--</div>-->
-        <div style="width: 350px;position:relative;float:right;margin-top:60px;margin-right: -80px;background-color: white">
+    <div class="row" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <!--        <div class="login_title" style="flex: 1; text-align: left; padding-top: -990px; margin-left: -210px;">-->
+        <!--            <p style="font-size: 48px;font-weight: 700;color: #fff;margin-bottom: 40px;">智慧党建云平台</p>-->
+        <!--            <span style="font-size: 30px;font-weight: 400;color: #fff;">让党建管理更科学</span>-->
+        <!--        </div>-->
+        <div style="position:relative;float:right;width: 350px; background-color: white; margin-top: -390px; padding: 20px;">
             <form autocomplete="off" id="signupForm">
                 <h2 style="text-align: center;color: #000000;"><strong>智慧党建后台管理系统</strong></h2></br>
                 <input class="form-control uname" name="username" placeholder="用户名" type="text" value=""/>
@@ -69,6 +56,10 @@
                         style="background-color: #ac2925">登录
                 </button>
             </form>
+        </div>
+        <div class="ba"
+             style="position: absolute;width: 300px;text-align: center;left: 50%; margin-left: -150px;bottom: 50px;">
+            <a target="_blank" style="color: #fff;font-size: 18px;">京ICP备xxxxx</a>
         </div>
     </div>
     <!--<div class="signup-footer">-->
