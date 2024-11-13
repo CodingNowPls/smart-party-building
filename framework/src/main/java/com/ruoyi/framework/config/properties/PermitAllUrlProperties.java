@@ -32,7 +32,7 @@ public class PermitAllUrlProperties implements InitializingBean, ApplicationCont
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
 
         // 获取所有带有 @Anonymous 注解的 Controller 类
         Map<String, Object> controllers = applicationContext.getBeansWithAnnotation(Anonymous.class);
