@@ -32,22 +32,22 @@
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
                 <li>
-                    <div class="user-panel">
-                        <a class="menuItem" th:href="@{/system/user/profile}" title="个人中心">
-                            <div class="hide" th:text="个人中心"></div>
-                            <div class="pull-left image">
-                                <img alt="User Image"
-                                     class="img-circle"
-                                     th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}">
-                            </div>
-                        </a>
-                        <div class="pull-left info">
-                            <p>[[${user.loginName}]]</p>
-                            <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
-                            <a style="padding-left:5px;" th:href="@{logout}"><i class="fa fa-sign-out text-danger"></i>
-                                注销</a>
-                        </div>
-                    </div>
+                    <!--                    <div class="user-panel">-->
+                    <!--                        <a class="menuItem" th:href="@{/system/user/profile}" title="个人中心">-->
+                    <!--                            <div class="hide" th:text="个人中心"></div>-->
+                    <!--                            <div class="pull-left image">-->
+                    <!--                                <img alt="User Image"-->
+                    <!--                                     class="img-circle"-->
+                    <!--                                     th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}">-->
+                    <!--                            </div>-->
+                    <!--                        </a>-->
+                    <!--                        <div class="pull-left info">-->
+                    <!--                            <p>[[${user.loginName}]]</p>-->
+                    <!--                            <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>-->
+                    <!--                            <a style="padding-left:5px;" th:href="@{logout}"><i class="fa fa-sign-out text-danger"></i>-->
+                    <!--                                注销</a>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                 </li>
                 <!--<li>-->
                 <!--<a href="#"><i class="fa fa-home"></i> <span class="nav-label">主页</span> <span class="fa arrow"></span></a>-->
