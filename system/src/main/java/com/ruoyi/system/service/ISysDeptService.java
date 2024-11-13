@@ -116,4 +116,6 @@ public interface ISysDeptService {
      * @param deptId 部门id
      */
     public void checkDeptDataScope(Long deptId);
+
+    List<SysDept> selectDeptListNoParent(SysDept dept);
 }

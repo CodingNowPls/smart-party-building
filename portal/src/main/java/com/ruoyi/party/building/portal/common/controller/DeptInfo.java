@@ -1,4 +1,4 @@
-package com.ruoyi.web.controller.tool;
+package com.ruoyi.party.building.portal.common.controller;
 
 import lombok.Data;
 

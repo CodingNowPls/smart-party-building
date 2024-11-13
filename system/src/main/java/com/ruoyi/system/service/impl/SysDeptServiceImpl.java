@@ -299,4 +299,8 @@ public class SysDeptServiceImpl implements ISysDeptService {
             }
         }
     }
+
+    public List<SysDept> selectDeptListNoParent(SysDept dept) {
+        return deptMapper.selectDeptListNoParent(dept);
+    }
 }
