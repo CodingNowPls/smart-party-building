@@ -7,27 +7,8 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.domain.entity.SysUser;
-import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
-import com.ruoyi.party.building.answer.domain.PagerAnswer;
-import com.ruoyi.party.building.article.domain.Article;
-import com.ruoyi.party.building.award.domain.Award;
-import com.ruoyi.party.building.deed.domain.Deed;
-import com.ruoyi.party.building.detail.domain.UserDetail;
-import com.ruoyi.party.building.exchange.domain.Exchange;
-import com.ruoyi.party.building.feel.domain.Feel;
-import com.ruoyi.party.building.inspect.domain.Inspect;
-import com.ruoyi.party.building.learn.domain.Learn;
-import com.ruoyi.party.building.news.domain.News;
-import com.ruoyi.party.building.pager.domain.PagerInfo;
-import com.ruoyi.party.building.pageruser.domain.PagerUser;
-import com.ruoyi.party.building.plan.domain.Plan;
-import com.ruoyi.party.building.story.domain.Story;
-import com.ruoyi.party.building.tale.domain.Tale;
-import com.ruoyi.party.building.type.domain.NewsType;
-import com.ruoyi.party.building.violate.domain.Violate;
-import com.ruoyi.system.domain.SysNotice;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysUserService;
 import io.swagger.annotations.Api;
@@ -35,18 +16,17 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Api("PC端接口")
+@RequiresGuest
 @RestController
-
 @RequestMapping("/portal/api")
 public class PortalApiController extends BaseController {
     @Autowired

@@ -6,6 +6,7 @@ import com.ruoyi.party.building.inspect.domain.Inspect;
 import com.ruoyi.party.building.inspect.service.IInspectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @Api("portal-领导视察接口")
 @RestController
+@RequiresGuest
 @RequestMapping("/api")
 public class PortalInspectController {
     @Autowired

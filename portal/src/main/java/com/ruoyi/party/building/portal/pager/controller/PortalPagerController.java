@@ -12,6 +12,7 @@ import com.ruoyi.party.building.question.domain.Question;
 import com.ruoyi.party.building.question.service.IQuestionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ import java.util.List;
  * <br>
  */
 @Api("portal-考试接口")
+@RequiresGuest
 @RestController
 @RequestMapping("/api")
 public class PortalPagerController {

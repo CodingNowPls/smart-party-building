@@ -6,13 +6,14 @@ import com.ruoyi.party.building.tale.domain.Tale;
 import com.ruoyi.party.building.tale.service.ITaleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * 接口
+ * 小组故事接口
  *
  * @author : gao
  * @date 2024年11月13日
@@ -20,7 +21,8 @@ import java.util.List;
  * <br>
  * <br>
  */
-@Api("portal-接口")
+@Api("portal-小组故事接口")
+@RequiresGuest
 @RestController
 @RequestMapping("/api")
 public class PortalTaleController {

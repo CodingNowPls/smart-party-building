@@ -6,6 +6,7 @@ import com.ruoyi.party.building.light.domain.Light;
 import com.ruoyi.party.building.light.service.ILightService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import java.util.List;
  * <br>
  */
 @Api("portal-十大亮点接口")
+@RequiresGuest
 @RestController
 @RequestMapping("/api")
 public class PortalLightController {

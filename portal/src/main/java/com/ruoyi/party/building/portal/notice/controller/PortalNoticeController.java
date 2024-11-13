@@ -5,8 +5,8 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.SysNotice;
 import com.ruoyi.system.service.ISysNoticeService;
 import io.swagger.annotations.Api;
-
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +21,9 @@ import java.util.List;
  * <br>
  * <br>
  */
+
 @Api("portal-资讯公告接口")
+@RequiresGuest
 @RestController
 @RequestMapping("/api")
 public class PortalNoticeController {

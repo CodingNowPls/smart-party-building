@@ -5,6 +5,7 @@ import com.ruoyi.party.building.learn.domain.Learn;
 import com.ruoyi.party.building.learn.service.ILearnService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * <br>
  */
 @Api("portal-学习接口")
+@RequiresGuest
 @RestController
 @RequestMapping("/api")
 public class PortalLearnController {

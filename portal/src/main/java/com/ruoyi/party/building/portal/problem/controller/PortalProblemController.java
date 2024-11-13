@@ -6,6 +6,7 @@ import com.ruoyi.party.building.problem.domain.Problem;
 import com.ruoyi.party.building.problem.service.IProblemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,8 @@ import java.util.List;
  * <br>
  * <br>
  */
-@Api("portal-接口")
+@Api("portal-问题墙接口")
+@RequiresGuest
 @RestController
 @RequestMapping("/api")
 public class PortalProblemController {

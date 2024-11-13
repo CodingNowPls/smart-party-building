@@ -7,6 +7,7 @@ import com.ruoyi.party.building.type.domain.NewsType;
 import com.ruoyi.party.building.type.service.INewsTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ import java.util.List;
  * <br>
  */
 @Api("portal-资讯接口")
+@RequiresGuest
 @RestController
 @RequestMapping("/api")
 public class PortalNewsController {

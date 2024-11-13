@@ -6,6 +6,7 @@ import com.ruoyi.party.building.award.domain.Award;
 import com.ruoyi.party.building.award.service.IAwardService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import java.util.List;
  * <br>
  */
 @Api("portal-接口")
+@RequiresGuest
 @RestController
 @RequestMapping("/api")
 public class PortalAwardController {

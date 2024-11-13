@@ -6,6 +6,7 @@ import com.ruoyi.party.building.record.domain.Record;
 import com.ruoyi.party.building.record.service.IRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ import java.util.List;
  * <br>
  */
 @Api("portal-会议记录接口")
+@RequiresGuest
 @RestController
 @RequestMapping("/api")
 public class PortalRecordController {
