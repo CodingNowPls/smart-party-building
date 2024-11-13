@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Api("PC端接口")
@@ -143,7 +144,73 @@ public class PortalApiController extends BaseController {
     }
 
 
+    @ApiOperation("组织结构图")
+    @PostMapping("/getDeptPicture")
+    @ResponseBody
+    public AjaxResult getDeptPicture() {
+        List<DeptInfo> infoList = new ArrayList<>();
+        SysDept dept = new SysDept();
+        dept.setStatus("0");
+        //获取所有数据
+        List<SysDept> allList = deptService.selectDeptList(dept);
+        List<DeptInfo> rootList = new ArrayList<>();
+        if (allList != null && allList.size() > 0) {
+            for (SysDept dept1 : allList) {
 
+                DeptInfo d = new DeptInfo();
+                d.setId(dept1.getDeptId());
+                d.setName(dept1.getDeptName());
+                d.setParentId(dept1.getParentId());
+                rootList.add(d);
+
+                //一级分类parentId是0
+                if (dept1.getParentId() == 0) {
+                    DeptInfo info = new DeptInfo();
+                    info.setId(dept1.getDeptId());
+                    info.setName(dept1.getDeptName());
+                    info.setParentId(dept1.getParentId());
+                    infoList.add(info);
+                }
+
+            }
+            // 为一级菜单设置子菜单，getChild是递归调用的
+            for (DeptInfo info : infoList) {
+                info.setChildren(getChilde(info.getId(), rootList));
+            }
+        }
+
+        AjaxResult ajaxResult = AjaxResult.success();
+        ajaxResult.put("data", infoList);
+        return ajaxResult;
+    }
+
+    /**
+     * 递归查找子菜单
+     *
+     * @param id       当前菜单id
+     * @param rootList 要查找的列表
+     * @return
+     */
+    private List<DeptInfo> getChilde(Long id, List<DeptInfo> rootList) {
+        //子菜单
+        List<DeptInfo> childList = new ArrayList<>();
+        for (DeptInfo deptInfo : rootList) {
+            // 遍历所有节点，将父菜单id与传过来的id比较
+            if (deptInfo.getParentId().equals(id)) {
+                childList.add(deptInfo);
+            }
+        }
+
+        // 把子菜单的子菜单再循环一遍
+        for (DeptInfo deptInfo : childList) {
+            deptInfo.setChildren(getChilde(deptInfo.getId(), rootList));
+        }
+        // 递归退出条件
+        if (childList.size() == 0) {
+            return null;
+        }
+        return childList;
+    }
 
 
 }
