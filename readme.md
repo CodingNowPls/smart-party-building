@@ -1,13 +1,12 @@
 基于：https://gitee.com/julingshen/smart_party_building ,感谢作者开源
 
-
 <table>
     <tr>
         <td><img src="https://gitee.com/a-crud-boy/smart-party-building/raw/master/images/login.png"/></td>
         <td><img src="https://gitee.com/a-crud-boy/smart-party-building/raw/master/images/index1.png"/></td>
     </tr>
-
 </table>
+
 ## 智慧党建平台简介
 
 用移动互联网来快速高效的解决党员党务工作、党员学习、宣传工作、活动策划、民生问题等方面的工作问题。
