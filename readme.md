@@ -3,6 +3,8 @@
 <table>
     <tr>
         <td><img src="https://gitee.com/a-crud-boy/smart-party-building/raw/master/images/login.png"/></td>
+    </tr>
+  <tr>
         <td><img src="https://gitee.com/a-crud-boy/smart-party-building/raw/master/images/index1.png"/></td>
     </tr>
 </table>
