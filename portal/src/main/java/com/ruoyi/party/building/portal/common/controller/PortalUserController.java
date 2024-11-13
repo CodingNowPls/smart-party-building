@@ -133,7 +133,7 @@ public class PortalUserController extends BaseController {
             }
             // 为一级菜单设置子菜单，getChild是递归调用的
             for (DeptInfo info : infoList) {
-                info.setChildren(getChilde(info.getId(), rootList));
+                info.setChildren(getChild(info.getId(), rootList));
             }
         }
 
@@ -150,7 +150,7 @@ public class PortalUserController extends BaseController {
      * @param rootList 要查找的列表
      * @return
      */
-    private List<DeptInfo> getChilde(Long id, List<DeptInfo> rootList) {
+    private List<DeptInfo> getChild(Long id, List<DeptInfo> rootList) {
         //子菜单
         List<DeptInfo> childList = new ArrayList<>();
         for (DeptInfo deptInfo : rootList) {
@@ -162,7 +162,7 @@ public class PortalUserController extends BaseController {
 
         // 把子菜单的子菜单再循环一遍
         for (DeptInfo deptInfo : childList) {
-            deptInfo.setChildren(getChilde(deptInfo.getId(), rootList));
+            deptInfo.setChildren(getChild(deptInfo.getId(), rootList));
         }
         // 递归退出条件
         if (childList.size() == 0) {
