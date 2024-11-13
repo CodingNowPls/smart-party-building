@@ -3,8 +3,8 @@
 
 <table>
     <tr>
-        <td><img src="https://images.gitee.com/uploads/images/2020/0819/144048_581b019e_7952792.png"/></td>
-        <td><img src="https://images.gitee.com/uploads/images/2020/0819/144032_4ebcdfd9_7952792.png"/></td>
+        <td><img src="https://gitee.com/a-crud-boy/smart-party-building/raw/master/images/login.png"/></td>
+        <td><img src="https://gitee.com/a-crud-boy/smart-party-building/raw/master/images/index1.png"/></td>
     </tr>
 
 </table>
