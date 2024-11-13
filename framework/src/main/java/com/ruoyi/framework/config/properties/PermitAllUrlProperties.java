@@ -33,17 +33,12 @@ public class PermitAllUrlProperties implements InitializingBean, ApplicationCont
 
     @Override
     public void afterPropertiesSet() {
-
         // 获取所有带有 @Anonymous 注解的 Controller 类
         Map<String, Object> controllers = applicationContext.getBeansWithAnnotation(Anonymous.class);
-
-
         for (Object controller : controllers.values()) {
             Class<?> clazz = controller.getClass();
-
             // 获取类级别的 @RequestMapping 或其他派生注解
             String[] classPaths = getMappingPaths(clazz);
-
             // 如果 @Anonymous 注解在类上
             if (AnnotationUtils.findAnnotation(clazz, Anonymous.class) != null) {
                 // 遍历类中的所有方法
