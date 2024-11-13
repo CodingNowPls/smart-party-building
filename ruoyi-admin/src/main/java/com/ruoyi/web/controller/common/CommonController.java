@@ -21,7 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 通用请求处理
@@ -84,6 +86,44 @@ public class CommonController {
             return AjaxResult.error(e.getMessage());
         }
     }
+
+
+    /**
+     * 文件上传
+     */
+    @PostMapping("/uploadImage_QiNiu")
+    @ResponseBody
+    public Map<String, Object> uploadImage_QiNiu(MultipartFile file) {
+        Map<String, Object> res = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
+        try {
+            if (!file.isEmpty()) {
+                // 上传文件路径
+                String filePath = RuoYiConfig.getUploadPath();
+                // 上传并返回新文件名称
+                String fileName = FileUploadUtils.upload(filePath, file);
+                String url = serverConfig.getUrl() + fileName;
+                String fileUrl = url;
+                if (StringUtils.isNotEmpty(fileUrl)) {
+                    data.put("src", fileUrl);
+                    res.put("code", 0);
+                    res.put("msg", "");
+                    res.put("data", data);
+                } else {
+                    res.put("code", 1);
+                    res.put("msg", "上传失败，请重试");
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            res.put("code", 1);
+            res.put("msg", e.getLocalizedMessage());
+        }
+        return res;
+    }
+
+
 
     /**
      * 通用上传请求（多个）

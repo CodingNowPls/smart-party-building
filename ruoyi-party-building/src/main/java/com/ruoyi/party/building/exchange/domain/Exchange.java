@@ -6,7 +6,7 @@ import lombok.Data;
 
 
 /**
- * 交流对象 tb_exchange
+ * 单位交流对象 tb_exchange
  *
  * @author ruoyi
  * @date 2020-05-08

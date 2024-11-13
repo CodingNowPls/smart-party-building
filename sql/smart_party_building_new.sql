@@ -2776,13 +2776,16 @@ CREATE TABLE `tb_picture`
 -- Records of tb_picture
 -- ----------------------------
 INSERT INTO `tb_picture`
-VALUES ('12', null, 'http://dangjian.jolinmind.com/FhCU83rtCwe2rIrLjrA5nK1nXMaH', '<p><br></p>', null, '',
+VALUES ('12', null, 'http://localhost:8080/profile/upload/2024/11/13/ban1_20241113101439A001.png', '<p><br></p>', null,
+        '',
         '2020-07-27 16:41:57', '', '2024-11-11 10:55:50', null);
 INSERT INTO `tb_picture`
-VALUES ('13', null, 'http://dangjian.jolinmind.com/lqsgzTz3zJCPpg5cbPU6iRYszEfk', '<p><br></p>', null, '',
+VALUES ('13', null, 'http://localhost:8080/profile/upload/2024/11/13/ban1_20241113101439A001.png', '<p><br></p>', null,
+        '',
         '2020-07-27 16:42:54', '', null, null);
 INSERT INTO `tb_picture`
-VALUES ('14', null, 'http://dangjian.jolinmind.com/FhP3eEDsvispTGAzZItQriAXPTr5', '<p><br></p>', null, '',
+VALUES ('14', null, 'http://localhost:8080/profile/upload/2024/11/13/ban1_20241113101439A001.png', '<p><br></p>', null,
+        '',
         '2020-07-27 16:43:23', '', null, null);
 
 -- ----------------------------
