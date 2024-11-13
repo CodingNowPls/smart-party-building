@@ -1,6 +1,7 @@
 package com.ruoyi.party.building.portal.pager.controller;
 
 
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.party.building.answer.domain.PagerAnswer;
@@ -12,7 +13,6 @@ import com.ruoyi.party.building.question.domain.Question;
 import com.ruoyi.party.building.question.service.IQuestionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +30,9 @@ import java.util.List;
  * <br>
  */
 @Api("portal-考试接口")
-@RequiresGuest
+@Anonymous
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/portal")
 public class PortalPagerController {
 
     @Autowired

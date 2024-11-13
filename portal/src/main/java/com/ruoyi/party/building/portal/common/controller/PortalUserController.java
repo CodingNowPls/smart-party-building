@@ -1,5 +1,6 @@
 package com.ruoyi.party.building.portal.common.controller;
 
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
@@ -10,7 +11,6 @@ import com.ruoyi.party.building.detail.service.IUserDetailService;
 import com.ruoyi.system.service.ISysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +26,9 @@ import java.util.List;
  * <br>
  */
 @Api("portal-用户接口")
-@RequiresGuest
+@Anonymous
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/portal")
 public class PortalUserController extends BaseController {
 
     @Autowired

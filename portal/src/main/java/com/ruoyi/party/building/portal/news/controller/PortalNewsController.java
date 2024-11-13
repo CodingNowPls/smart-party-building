@@ -1,5 +1,6 @@
 package com.ruoyi.party.building.portal.news.controller;
 
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.party.building.news.domain.News;
 import com.ruoyi.party.building.news.service.INewsService;
@@ -7,7 +8,6 @@ import com.ruoyi.party.building.type.domain.NewsType;
 import com.ruoyi.party.building.type.service.INewsTypeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +23,9 @@ import java.util.List;
  * <br>
  */
 @Api("portal-资讯接口")
-@RequiresGuest
+@Anonymous
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/portal")
 public class PortalNewsController {
 
     @Autowired

@@ -1,12 +1,12 @@
 package com.ruoyi.party.building.portal.feel.controller;
 
 
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.party.building.feel.domain.Feel;
 import com.ruoyi.party.building.feel.service.IFeelService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +22,9 @@ import java.util.List;
  * <br>
  */
 @Api("portal-心得体会接口")
-@RequiresGuest
+@Anonymous
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/portal")
 public class PortalFeelController {
 
     @Autowired

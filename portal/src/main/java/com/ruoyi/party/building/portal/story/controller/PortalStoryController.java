@@ -1,12 +1,12 @@
 package com.ruoyi.party.building.portal.story.controller;
 
 
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.party.building.story.domain.Story;
 import com.ruoyi.party.building.story.service.IStoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +24,9 @@ import java.util.List;
  * <br>
  */
 @Api("portal-暖心故事接口")
-@RequiresGuest
+@Anonymous
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/portal")
 public class PortalStoryController {
 
     @Autowired

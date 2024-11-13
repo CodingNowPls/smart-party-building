@@ -1,6 +1,7 @@
 package com.ruoyi.party.building.portal.common.controller;
 
 
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.config.ServerConfig;
 import com.ruoyi.common.core.controller.BaseController;
@@ -16,7 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Api("PC端接口")
-@RequiresGuest
+@Anonymous
 @RestController
-@RequestMapping("/portal/api")
+@RequestMapping("/portal")
 public class PortalApiController extends BaseController {
     @Autowired
     private ServerConfig serverConfig;

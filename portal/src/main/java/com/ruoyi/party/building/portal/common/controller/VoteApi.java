@@ -1,6 +1,7 @@
 package com.ruoyi.party.building.portal.common.controller;
 
 
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.party.building.vote.service.IVoteRecordService;
 import com.ruoyi.party.building.vote.service.IVoteService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @Api("选举接口")
+@Anonymous
 @RestController
 @RequestMapping("/vote_api/*")
 public class VoteApi extends BaseController {

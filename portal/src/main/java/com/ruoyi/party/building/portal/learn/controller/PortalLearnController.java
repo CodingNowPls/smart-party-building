@@ -1,11 +1,11 @@
 package com.ruoyi.party.building.portal.learn.controller;
 
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.party.building.learn.domain.Learn;
 import com.ruoyi.party.building.learn.service.ILearnService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +19,9 @@ import java.util.List;
  * <br>
  */
 @Api("portal-学习接口")
-@RequiresGuest
+@Anonymous
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/portal")
 public class PortalLearnController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class PortalLearnController {
 
 
     @ApiOperation("学分添加")
-    @PostMapping("addLearn")
+    @PostMapping("/addLearn")
     public AjaxResult addLearn(@RequestBody Learn learn) {
         int result = learnService.insertLearn(learn);
         if (result > 0) {

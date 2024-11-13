@@ -1,12 +1,12 @@
 package com.ruoyi.party.building.portal.notice.controller;
 
 
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.SysNotice;
 import com.ruoyi.system.service.ISysNoticeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +23,9 @@ import java.util.List;
  */
 
 @Api("portal-资讯公告接口")
-@RequiresGuest
+@Anonymous
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/portal")
 public class PortalNoticeController {
 
     @Autowired
