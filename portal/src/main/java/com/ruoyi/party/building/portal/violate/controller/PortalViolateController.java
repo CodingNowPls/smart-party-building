@@ -36,7 +36,7 @@ public class PortalViolateController {
 
 
     @ApiOperation("违规违纪列表 ")
-    @PostMapping("getViolateList")
+    @PostMapping("/getViolateList")
     public AjaxResult getViolateList() {
         Violate violate = new Violate();
         List<Violate> list = violateService.selectViolateList(violate);
