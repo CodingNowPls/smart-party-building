@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('多层窗口B')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <form class="form-horizontal" id="form-user-add">
+            <div class="row">
+                <div class="col-sm-12" style="margin-top: 20px">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">用户名称：</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" id="name" placeholder="请输入用户名称" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

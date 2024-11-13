@@ -8,8 +8,20 @@
     <version>4.7.9</version>
 
     <name>smart-party-building</name>
-
+    <packaging>pom</packaging>
     <description>党建知识管理平台</description>
+
+    <modules>
+        <module>smart-party-building-common</module>
+        <module>smart-party-building-framework</module>
+        <module>smart-party-building-quartz</module>
+        <module>smart-party-building-generator</module>
+        <module>smart-party-building-system</module>
+        <module>smart-party-building-admin</module>
+        <module>smart-party-building-biz-core</module>
+        <module>smart-party-building-app</module>
+        <module>smart-party-building-portal</module>
+    </modules>
 
     <properties>
         <ruoyi.version>4.7.9</ruoyi.version>
@@ -36,6 +48,10 @@
         <spring-framework.version>5.3.39</spring-framework.version>
     </properties>
 
+
+    <dependencies>
+
+    </dependencies>
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
@@ -197,61 +213,56 @@
             <!-- 定时任务-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-quartz</artifactId>
+                <artifactId>smart-party-building-quartz</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
             <!-- 代码生成-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-generator</artifactId>
+                <artifactId>smart-party-building-generator</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
             <!-- 核心模块-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-framework</artifactId>
+                <artifactId>smart-party-building-framework</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
             <!-- 系统模块-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-system</artifactId>
+                <artifactId>smart-party-building-system</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
             <!-- 通用工具-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-common</artifactId>
+                <artifactId>smart-party-building-common</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-party-building</artifactId>
+                <artifactId>smart-party-building-biz-core</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>smart-party-building-app</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>smart-party-building-portal</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
-
-    <modules>
-        <module>ruoyi-admin</module>
-        <module>ruoyi-framework</module>
-        <module>ruoyi-system</module>
-        <module>ruoyi-quartz</module>
-        <module>ruoyi-generator</module>
-        <module>ruoyi-common</module>
-        <module>ruoyi-party-building</module>
-    </modules>
-    <packaging>pom</packaging>
-
-
-    <dependencies>
-
-    </dependencies>
-
     <build>
         <plugins>
             <plugin>
